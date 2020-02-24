@@ -1,34 +1,36 @@
 package org.example.adapters.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.example.application.BookDTO;
+import org.example.application.BookUseCase;
+import org.example.application.domain.repositories.BookRepository;
 
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 
-@Controller("/books/")
+@Controller("/books")
 public class BookController {
+    private BookUseCase bookUseCase;
 
-    List<BookDTO> books = new ArrayList<>();
+    public BookController(BookRepository bookRepository) {
+        this.bookUseCase = new BookUseCase(bookRepository);
+    }
 
     @Post
-    public BookDTO add(BookDTO book) {
-        books.add(book);
-        return book;
+    public void add(BookDTO book) {
+        bookUseCase.addBook(book);
     }
 
     @Get("/{title}")
     public Optional<BookDTO> getByTitle(String title) {
-        return books.stream().filter(it -> it.getTitle().equals(title)).findFirst();
+        return bookUseCase.findByTitle(title);
     }
 
     @Get
     public List<BookDTO> getAll() {
-        return books;
-
+        return bookUseCase.findAll();
     }
 }

@@ -94,8 +94,7 @@ public class TestBookController {
         HttpResponse<BookDTO> response = client.toBlocking().exchange(request, Argument.of(BookDTO.class));
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-        Assertions.assertNotNull(response.body());
-        Assertions.assertEquals(requestBody.toString(), response.body().toString());
+        Assertions.assertNull(response.body());
     }
 
     private void postBooks(List<BookDTO> books) {
