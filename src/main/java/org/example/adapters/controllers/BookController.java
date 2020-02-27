@@ -3,9 +3,12 @@ package org.example.adapters.controllers;
 import java.util.List;
 import java.util.Optional;
 
-import org.example.application.BookDTO;
-import org.example.application.BookUseCase;
-import org.example.application.domain.repositories.BookRepository;
+import javax.inject.Inject;
+
+import org.example.application.dtos.BookDTO;
+import org.example.application.ports.in.BookUseCasePort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -13,24 +16,28 @@ import io.micronaut.http.annotation.Post;
 
 @Controller("/books")
 public class BookController {
-    private BookUseCase bookUseCase;
 
-    public BookController(BookRepository bookRepository) {
-        this.bookUseCase = new BookUseCase(bookRepository);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
+
+    @Inject
+    private BookUseCasePort bookUseCasePort;
 
     @Post
-    public void add(BookDTO book) {
-        bookUseCase.addBook(book);
+    public void add(BookDTO bookDTO) {
+        LOGGER.info("post, bookDTO={}", bookDTO);
+        bookUseCasePort.addBook(bookDTO);
+        LOGGER.info("book added");
     }
 
     @Get("/{title}")
     public Optional<BookDTO> getByTitle(String title) {
-        return bookUseCase.findByTitle(title);
+        LOGGER.info("get, title={}", title);
+        return bookUseCasePort.findByTitle(title);
     }
 
     @Get
     public List<BookDTO> getAll() {
-        return bookUseCase.findAll();
+        LOGGER.info("get");
+        return bookUseCasePort.findAll();
     }
 }

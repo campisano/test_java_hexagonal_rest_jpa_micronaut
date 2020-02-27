@@ -1,17 +1,13 @@
-package org.example.application;
+package org.example.domain.entities;
 
-public class BookDTO {
-
+public class Book {
     private String isbn;
     private String title;
     private String author;
     private String description;
 
-    public BookDTO() {
-    }
-
-    public BookDTO(String isbn, String title, String author, String description) {
-
+    public Book(String isbn, String title, String author, String description) {
+        super();
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -32,11 +28,5 @@ public class BookDTO {
 
     public String getDescription() {
         return description;
-    }
-
-    @Override
-    public String toString() {
-        return "BookDTO [isbn=" + isbn + ", title=" + title + ", author=" + author + ", description=" + description
-                + "]";
     }
 }

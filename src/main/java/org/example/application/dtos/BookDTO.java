@@ -1,27 +1,21 @@
-package org.example.application.domain.entities;
+package org.example.application.dtos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
-public class Book {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class BookDTO {
 
     private String isbn;
     private String title;
     private String author;
     private String description;
 
-    public Long getId() {
-        return id;
+    public BookDTO() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public BookDTO(String isbn, String title, String author, String description) {
+
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.description = description;
     }
 
     public String getIsbn() {
@@ -54,5 +48,11 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "BookDTO [isbn=" + isbn + ", title=" + title + ", author=" + author + ", description=" + description
+                + "]";
     }
 }
