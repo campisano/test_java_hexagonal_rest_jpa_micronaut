@@ -70,7 +70,7 @@ public class TestBookController {
                 () -> client.toBlocking().exchange(request, Argument.listOf(BookDTO.class)));
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
-        Assertions.assertEquals("Page Not Found", exception.getMessage());
+        Assertions.assertEquals("Not Found", exception.getMessage());
     }
 
     @Test

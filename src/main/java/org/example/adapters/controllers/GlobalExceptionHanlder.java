@@ -9,6 +9,7 @@ import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 
 @Produces
@@ -21,7 +22,9 @@ public class GlobalExceptionHanlder implements ExceptionHandler<Exception, HttpR
 
     @Override
     public HttpResponse<?> handle(HttpRequest request, Exception exception) {
+
         LOGGER.error("Request " + request.toString(), exception);
-        return HttpResponse.serverError();
+
+        return HttpResponse.<JsonError>serverError().body(new JsonError(exception.getClass().getName()));
     }
 }
