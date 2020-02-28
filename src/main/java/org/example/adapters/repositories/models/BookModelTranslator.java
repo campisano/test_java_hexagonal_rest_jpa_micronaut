@@ -3,7 +3,7 @@ package org.example.adapters.repositories.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.example.application.dtos.BookDTO;
+import org.example.application.ports.dtos.BookDTO;
 
 public class BookModelTranslator {
 

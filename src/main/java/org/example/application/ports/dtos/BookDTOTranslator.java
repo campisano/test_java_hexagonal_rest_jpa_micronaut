@@ -1,4 +1,4 @@
-package org.example.application.dtos;
+package org.example.application.ports.dtos;
 
 import java.util.ArrayList;
 import java.util.List;

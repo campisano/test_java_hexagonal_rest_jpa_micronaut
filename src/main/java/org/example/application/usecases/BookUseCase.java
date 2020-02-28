@@ -3,18 +3,22 @@ package org.example.application.usecases;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.example.application.dtos.BookDTO;
-import org.example.application.dtos.BookDTOTranslator;
+import org.example.application.ports.dtos.BookDTO;
+import org.example.application.ports.dtos.BookDTOTranslator;
 import org.example.application.ports.in.BookUseCasePort;
 import org.example.application.ports.out.BookPersistencePort;
 import org.example.domain.entities.Book;
 
+@Named
 public class BookUseCase implements BookUseCasePort {
 
-    @Inject
     private BookPersistencePort bookPersistencePort;
+
+    public BookUseCase(BookPersistencePort bookPersistencePort) {
+        this.bookPersistencePort = bookPersistencePort;
+    }
 
     @Override
     public void addBook(BookDTO bookDTO) {

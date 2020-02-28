@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.example.adapters.repositories.models.BookModel;
 import org.example.adapters.repositories.models.BookModelTranslator;
-import org.example.application.dtos.BookDTO;
+import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.out.BookPersistencePort;
 
-public class BookRepository implements BookPersistencePort {
+@Singleton
+public class BookRepositoryAdapter implements BookPersistencePort {
 
-    @Inject
     private BookRepositoryJPA bookRepositoryJPA;
+
+    public BookRepositoryAdapter(BookRepositoryJPA bookRepositoryJPA) {
+        this.bookRepositoryJPA = bookRepositoryJPA;
+    }
 
     @Override
     public boolean existBookWithTitle(String title) {

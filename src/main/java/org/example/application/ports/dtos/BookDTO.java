@@ -1,4 +1,4 @@
-package org.example.application.dtos;
+package org.example.application.ports.dtos;
 
 public class BookDTO {
 

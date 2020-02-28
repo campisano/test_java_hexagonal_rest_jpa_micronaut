@@ -3,7 +3,7 @@ package org.example.application.ports.out;
 import java.util.List;
 import java.util.Optional;
 
-import org.example.application.dtos.BookDTO;
+import org.example.application.ports.dtos.BookDTO;
 
 public interface BookPersistencePort {
 

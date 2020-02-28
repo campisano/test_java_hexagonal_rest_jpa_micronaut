@@ -3,9 +3,7 @@ package org.example.adapters.controllers;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
-import org.example.application.dtos.BookDTO;
+import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.in.BookUseCasePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,11 @@ import io.micronaut.http.annotation.Post;
 public class BookController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
-
-    @Inject
     private BookUseCasePort bookUseCasePort;
+
+    public BookController(BookUseCasePort bookUseCasePort) {
+        this.bookUseCasePort = bookUseCasePort;
+    }
 
     @Post
     public void add(BookDTO bookDTO) {
