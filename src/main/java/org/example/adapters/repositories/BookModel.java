@@ -1,27 +1,35 @@
-package org.example.adapters.repositories.models;
+package org.example.adapters.repositories;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "book")
 public class BookModel {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String isbn;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
+
     private String description;
+
+    public BookModel() {
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getIsbn() {

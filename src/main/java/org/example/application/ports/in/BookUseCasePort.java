@@ -7,9 +7,9 @@ import org.example.application.ports.dtos.BookDTO;
 
 public interface BookUseCasePort {
 
-    void addBook(BookDTO bookDTO);
+    BookDTO addBook(BookDTO dto) throws IsbnAlreadyExistsException;
 
     List<BookDTO> findAll();
 
-    Optional<BookDTO> findByTitle(String title);
+    Optional<BookDTO> findByIsbn(String isbn);
 }

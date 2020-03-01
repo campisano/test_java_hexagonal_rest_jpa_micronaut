@@ -3,7 +3,7 @@ package org.example.application.ports.dtos;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.example.domain.entities.Book;
+import org.example.domain.Book;
 
 public class BookDTOTranslator {
 

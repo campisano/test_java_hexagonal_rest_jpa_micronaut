@@ -1,5 +1,8 @@
 package org.example.adapters.controllers;
 
+import java.text.MessageFormat;
+import java.util.Objects;
+
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
@@ -16,15 +19,16 @@ import io.micronaut.http.server.exceptions.ExceptionHandler;
 @Singleton
 @Requires(classes = { Exception.class, ExceptionHandler.class })
 @SuppressWarnings("rawtypes")
-public class GlobalExceptionHanlder implements ExceptionHandler<Exception, HttpResponse> {
+public class GlobalExceptionHandler implements ExceptionHandler<Exception, HttpResponse> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHanlder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @Override
     public HttpResponse<?> handle(HttpRequest request, Exception exception) {
 
-        LOGGER.error("Request " + request.toString(), exception);
+        LOGGER.error(MessageFormat.format("Request: {0}, exception: {1}", Objects.toString(request),
+                exception.getMessage()));
 
-        return HttpResponse.<JsonError>serverError().body(new JsonError(exception.getClass().getName()));
+        return HttpResponse.<JsonError>serverError().body(new JsonError(exception.getMessage()));
     }
 }

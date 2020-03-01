@@ -1,4 +1,4 @@
-package org.example.domain.entities;
+package org.example.domain;
 
 public class Book {
     private String isbn;
@@ -7,7 +7,6 @@ public class Book {
     private String description;
 
     public Book(String isbn, String title, String author, String description) {
-        super();
         this.isbn = isbn;
         this.title = title;
         this.author = author;

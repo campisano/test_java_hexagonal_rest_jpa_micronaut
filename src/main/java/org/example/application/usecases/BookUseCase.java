@@ -8,8 +8,9 @@ import javax.inject.Named;
 import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.dtos.BookDTOTranslator;
 import org.example.application.ports.in.BookUseCasePort;
+import org.example.application.ports.in.IsbnAlreadyExistsException;
 import org.example.application.ports.out.BookPersistencePort;
-import org.example.domain.entities.Book;
+import org.example.domain.Book;
 
 @Named
 public class BookUseCase implements BookUseCasePort {
@@ -21,15 +22,15 @@ public class BookUseCase implements BookUseCasePort {
     }
 
     @Override
-    public void addBook(BookDTO bookDTO) {
+    public BookDTO addBook(BookDTO bookDTO) {
 
         Book book = BookDTOTranslator.fromDTO(bookDTO);
 
-        if (bookPersistencePort.findByTitle(book.getTitle()).isPresent()) {
-            throw new RuntimeException("Book with this title already exists");
+        if (bookPersistencePort.findByIsbn(book.getIsbn()).isPresent()) {
+            throw new IsbnAlreadyExistsException(book.getIsbn());
         }
 
-        bookPersistencePort.save(BookDTOTranslator.toDTO(book));
+        return bookPersistencePort.create(BookDTOTranslator.toDTO(book));
     }
 
     @Override
@@ -38,8 +39,8 @@ public class BookUseCase implements BookUseCasePort {
     }
 
     @Override
-    public Optional<BookDTO> findByTitle(String title) {
-        Optional<BookDTO> book = bookPersistencePort.findByTitle(title);
+    public Optional<BookDTO> findByIsbn(String isbn) {
+        Optional<BookDTO> book = bookPersistencePort.findByIsbn(isbn);
         if (!book.isPresent()) {
             return Optional.<BookDTO>empty();
         }

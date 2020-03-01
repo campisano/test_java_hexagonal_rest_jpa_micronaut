@@ -1,4 +1,4 @@
-package org.example.adapters.repositories.models;
+package org.example.adapters.repositories;
 
 import java.util.ArrayList;
 import java.util.List;

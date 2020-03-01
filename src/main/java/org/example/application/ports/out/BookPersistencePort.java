@@ -7,11 +7,13 @@ import org.example.application.ports.dtos.BookDTO;
 
 public interface BookPersistencePort {
 
-    boolean existBookWithTitle(String title);
+    BookDTO create(BookDTO dto);
 
-    void save(BookDTO bookDTO);
+    BookDTO updateByIsbn(BookDTO dto);
 
     List<BookDTO> findAll();
 
-    Optional<BookDTO> findByTitle(String title);
+    Optional<BookDTO> findByIsbn(String isbn);
+
+    boolean existBookWithIsbn(String isbn);
 }
