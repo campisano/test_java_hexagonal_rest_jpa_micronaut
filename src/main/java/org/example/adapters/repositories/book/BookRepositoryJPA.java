@@ -1,4 +1,4 @@
-package org.example.adapters.repositories;
+package org.example.adapters.repositories.book;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface BookRepositoryJPA extends JpaRepository<BookModel, Long> {
+interface BookRepositoryJPA extends JpaRepository<BookModel, Long> {
 
     @Override
     List<BookModel> findAll();

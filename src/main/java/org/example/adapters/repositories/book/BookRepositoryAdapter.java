@@ -1,8 +1,8 @@
-package org.example.adapters.repositories;
+package org.example.adapters.repositories.book;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
 import javax.transaction.Transactional;
@@ -53,9 +53,7 @@ public class BookRepositoryAdapter implements BookPersistencePort {
 
     @Override
     public List<BookDTO> findAll() {
-        List<BookModel> models = new ArrayList<>();
-        bookRepositoryJPA.findAll().forEach(models::add);
-        return BookModelTranslator.toDTO(models);
+        return bookRepositoryJPA.findAll().stream().map(BookModelTranslator::toDTO).collect(Collectors.toList());
     }
 
     @Override

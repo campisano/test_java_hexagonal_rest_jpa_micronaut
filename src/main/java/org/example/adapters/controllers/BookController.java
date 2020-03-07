@@ -1,11 +1,13 @@
 package org.example.adapters.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.example.application.ports.dtos.BookDTO;
-import org.example.application.ports.in.BookUseCasePort;
+import org.example.application.ports.in.AddBookUseCasePort;
+import org.example.application.ports.in.GetAllBookUseCasePort;
+import org.example.application.ports.in.GetBookUseCasePort;
 import org.example.application.ports.in.IsbnAlreadyExistsException;
+import org.example.application.ports.in.IsbnNotExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,55 +21,74 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 
-@Controller("/books")
+@Controller("/v1/books")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BookController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
-    private BookUseCasePort bookUseCasePort;
+    private AddBookUseCasePort addBookUseCase;
+    private GetBookUseCasePort getBookUseCase;
+    private GetAllBookUseCasePort getAllBookUseCase;
 
-    public BookController(BookUseCasePort bookUseCasePort) {
-        this.bookUseCasePort = bookUseCasePort;
+    public BookController(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
+            GetAllBookUseCasePort getAllBookUseCase) {
+        this.addBookUseCase = addBookUseCase;
+        this.getBookUseCase = getBookUseCase;
+        this.getAllBookUseCase = getAllBookUseCase;
     }
 
     @Post("/")
-    public HttpResponse<BookDTO> add(HttpRequest<BookDTO> request) {
-        LOGGER.info("{}::{} [{}]", request.getUri(), request.getMethod(), request.getBody());
+    public HttpResponse<BookDTO> add(HttpRequest<BookScheme> request) {
+        LOGGER.info("{}, body={}", request.toString(), request.getBody());
 
         if (!request.getBody().isPresent()) {
+            LOGGER.error("request without body");
             return HttpResponse.status(HttpStatus.BAD_REQUEST);
         }
 
+        BookScheme body = request.getBody().get();
+
         try {
-            BookDTO bookDTO = bookUseCasePort.addBook(request.getBody().get());
-            LOGGER.info("created, bookDTO={}", bookDTO);
-            return HttpResponse.created(bookDTO);
+            BookDTO book = addBookUseCase.execute(new BookDTO(body.isbn, body.title, body.author, body.description));
+            LOGGER.info("created, book={}", book);
+            return HttpResponse.created(book);
         } catch (IsbnAlreadyExistsException exception) {
             LOGGER.error("exception, message={}", exception.getMessage());
-            return HttpResponse.status(HttpStatus.FORBIDDEN);
+            return HttpResponse.status(HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (Exception exception) {
+            LOGGER.error("exception, message={}", exception.toString());
+            return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Get("/{isbn}")
     public HttpResponse<BookDTO> getByIsbn(HttpRequest<?> request, String isbn) {
-        LOGGER.info("{}::{} [{}]", request.getUri(), request.getMethod(), request.getBody());
+        LOGGER.info("{}, isbn={}", request.toString(), isbn);
 
-        Optional<BookDTO> optDto = bookUseCasePort.findByIsbn(isbn);
-
-        if (!optDto.isPresent()) {
-            LOGGER.error("not found, isbn={}", isbn);
-            return HttpResponse.notFound();
+        try {
+            BookDTO dto = getBookUseCase.execute(isbn);
+            LOGGER.info("ok, isbn={}", isbn);
+            return HttpResponse.ok(dto);
+        } catch (IsbnNotExistsException exception) {
+            LOGGER.error("exception, message={}", exception.getMessage());
+            return HttpResponse.status(HttpStatus.NOT_FOUND);
+        } catch (Exception exception) {
+            LOGGER.error("exception, message={}", exception.toString());
+            return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        LOGGER.error("ok, isbn={}", isbn);
-        return HttpResponse.ok(optDto.get());
     }
 
     @Get("/")
     public HttpResponse<List<BookDTO>> getAll(HttpRequest<?> request) {
-        LOGGER.info("{}::{} [{}]", request.getUri(), request.getMethod(), request.getBody());
+        LOGGER.info("{}", request.toString());
 
-        return HttpResponse.ok(bookUseCasePort.findAll());
+        try {
+            LOGGER.info("ok");
+            return HttpResponse.ok(getAllBookUseCase.execute());
+        } catch (Exception exception) {
+            LOGGER.error("exception, message={}", exception.toString());
+            return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

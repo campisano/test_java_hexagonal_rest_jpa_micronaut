@@ -1,4 +1,4 @@
-package org.example.adapters.controllers;
+package org.example.adapters.controllers.utils;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -51,6 +51,7 @@ public class GlobalStatusHandler {
     private HttpResponse<?> handleError(HttpRequest<?> request, HttpStatus status) {
         LOGGER.error(MessageFormat.format("Request: {0}, status code: {1}, status reason: {2}",
                 Objects.toString(request), status.getCode(), status.getReason()));
+
         return HttpResponse.<JsonError>status(status, status.getReason());
     }
 }

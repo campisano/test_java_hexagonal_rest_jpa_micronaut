@@ -1,18 +1,19 @@
-package org.example.adapters.repositories;
+package org.example.adapters.repositories.book;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "book")
-public class BookModel {
+class BookModel {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(nullable = false, unique = true)
     private String isbn;
@@ -25,18 +26,29 @@ public class BookModel {
 
     private String description;
 
-    public BookModel() {
+    BookModel() {
     }
 
-    public Long getId() {
+    BookModel(String isbn, String title, String author, String description) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+    }
+
+    public long getId() {
         return id;
+    }
+
+    void setId(long id) {
+        this.id = id;
     }
 
     public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -44,7 +56,7 @@ public class BookModel {
         return title;
     }
 
-    public void setTitle(String title) {
+    void setTitle(String title) {
         this.title = title;
     }
 
@@ -52,7 +64,7 @@ public class BookModel {
         return author;
     }
 
-    public void setAuthor(String author) {
+    void setAuthor(String author) {
         this.author = author;
     }
 
@@ -60,7 +72,7 @@ public class BookModel {
         return description;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 }
