@@ -1,7 +1,8 @@
 PROJECT_NAME := test-java-micronaut-rest-jpa
 MAIN_CLASS := org.example.Application
 JAR = $(wildcard ./target/$(PROJECT_NAME)-*.jar)
-DEBUG = -Dexec.args="-noverify -XX:TieredStopAtLevel=1 -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000 -Xnoagent -Djava.compiler=NONE -classpath $(JAR) $(MAIN_CLASS)"
+RUN_ARGS := -noverify -XX:TieredStopAtLevel=1 -Xnoagent -Djava.compiler=NONE
+DEBUG_ARGS := $(RUN_ARGS) -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000
 
 .PHONY: test
 test: clean
@@ -17,7 +18,7 @@ package: clean
 
 .PHONY: debug
 debug: package
-	mvn exec:exec $(DEBUG)
+	mvn exec:exec -Dexec.args="$(DEBUG_ARGS) -classpath $(JAR) $(MAIN_CLASS)"
 
 .PHONY: clean
 clean:
