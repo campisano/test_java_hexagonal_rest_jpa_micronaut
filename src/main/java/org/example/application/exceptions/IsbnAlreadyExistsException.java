@@ -1,4 +1,4 @@
-package org.example.application.ports.in;
+package org.example.application.exceptions;
 
 import java.text.MessageFormat;
 

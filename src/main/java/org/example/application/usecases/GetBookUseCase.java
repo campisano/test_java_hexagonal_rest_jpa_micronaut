@@ -2,9 +2,9 @@ package org.example.application.usecases;
 
 import java.util.Optional;
 
-import org.example.application.ports.dtos.BookDTO;
+import org.example.application.dtos.BookDTO;
+import org.example.application.exceptions.IsbnNotExistsException;
 import org.example.application.ports.in.GetBookUseCasePort;
-import org.example.application.ports.in.IsbnNotExistsException;
 import org.example.application.ports.out.BooksRepositoryPort;
 
 public class GetBookUseCase implements GetBookUseCasePort {

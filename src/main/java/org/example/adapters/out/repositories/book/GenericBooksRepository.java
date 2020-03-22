@@ -1,4 +1,4 @@
-package org.example.adapters.repositories.book;
+package org.example.adapters.out.repositories.book;
 
 import java.util.List;
 import java.util.Optional;

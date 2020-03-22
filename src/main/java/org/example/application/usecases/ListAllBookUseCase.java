@@ -2,7 +2,7 @@ package org.example.application.usecases;
 
 import java.util.List;
 
-import org.example.application.ports.dtos.BookDTO;
+import org.example.application.dtos.BookDTO;
 import org.example.application.ports.in.ListAllBookUseCasePort;
 import org.example.application.ports.out.BooksRepositoryPort;
 

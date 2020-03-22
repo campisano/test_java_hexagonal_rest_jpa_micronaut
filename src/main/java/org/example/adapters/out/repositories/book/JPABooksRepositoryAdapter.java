@@ -1,4 +1,4 @@
-package org.example.adapters.repositories.book;
+package org.example.adapters.out.repositories.book;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,14 +6,14 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.example.application.ports.dtos.BookDTO;
+import org.example.application.dtos.BookDTO;
 import org.example.application.ports.out.BooksRepositoryPort;
 
-public class BooksRepositoryAdapter implements BooksRepositoryPort {
+public class JPABooksRepositoryAdapter implements BooksRepositoryPort {
 
     private GenericBooksRepository booksRepository;
 
-    public BooksRepositoryAdapter(GenericBooksRepository booskRepository) {
+    public JPABooksRepositoryAdapter(GenericBooksRepository booskRepository) {
         this.booksRepository = booskRepository;
     }
 

@@ -1,4 +1,4 @@
-package org.example.adapters.controllers;
+package org.example.adapters.in.controllers;
 
 import io.micronaut.core.annotation.Introspected;
 
