@@ -7,21 +7,21 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.example.application.ports.dtos.BookDTO;
-import org.example.application.ports.out.BookRepositoryPort;
+import org.example.application.ports.out.BooksRepositoryPort;
 
-public class BookRepositoryAdapter implements BookRepositoryPort {
+public class BooksRepositoryAdapter implements BooksRepositoryPort {
 
-    private GenericBookRepository bookRepository;
+    private GenericBooksRepository booksRepository;
 
-    public BookRepositoryAdapter(GenericBookRepository bookRepositoryJPA) {
-        this.bookRepository = bookRepositoryJPA;
+    public BooksRepositoryAdapter(GenericBooksRepository booskRepository) {
+        this.booksRepository = booskRepository;
     }
 
     @Override
     public BookDTO create(BookDTO dto) {
         BookModel model = BookModelTranslator.fromDTO(dto);
 
-        model = bookRepository.save(model);
+        model = booksRepository.save(model);
 
         return BookModelTranslator.toDTO(model);
     }
@@ -33,7 +33,7 @@ public class BookRepositoryAdapter implements BookRepositoryPort {
             throw new RuntimeException("Isbn cannot be null");
         }
 
-        Optional<BookModel> optModel = bookRepository.findByIsbn(dto.getIsbn());
+        Optional<BookModel> optModel = booksRepository.findByIsbn(dto.getIsbn());
         if (!optModel.isPresent()) {
             throw new RuntimeException("No book exist with specified isbn " + dto.getIsbn());
         }
@@ -44,19 +44,19 @@ public class BookRepositoryAdapter implements BookRepositoryPort {
         model.setAuthor(dto.getAuthor());
         model.setDescription(dto.getDescription());
 
-        model = bookRepository.save(model);
+        model = booksRepository.save(model);
 
         return BookModelTranslator.toDTO(model);
     }
 
     @Override
     public List<BookDTO> findAll() {
-        return bookRepository.findAll().stream().map(BookModelTranslator::toDTO).collect(Collectors.toList());
+        return booksRepository.findAll().stream().map(BookModelTranslator::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public Optional<BookDTO> findByIsbn(String isbn) {
-        Optional<BookModel> optModel = bookRepository.findByIsbn(isbn);
+        Optional<BookModel> optModel = booksRepository.findByIsbn(isbn);
 
         if (!optModel.isPresent()) {
             return Optional.<BookDTO>empty();

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.example.application.ports.dtos.BookDTO;
 
-public interface BookRepositoryPort {
+public interface BooksRepositoryPort {
 
     BookDTO create(BookDTO dto);
 

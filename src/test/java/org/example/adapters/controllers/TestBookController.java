@@ -17,7 +17,6 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.DefaultHttpClient;
-import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.runtime.server.EmbeddedServer;
 
 public class TestBookController {
@@ -41,9 +40,9 @@ public class TestBookController {
 
     @Test
     public void listAllWhenEmpty() {
-        HttpRequest<?> request = HttpRequest.GET("/books");
+        HttpRequest<?> request = HttpRequest.GET("/v1/books");
 
-        HttpResponse<?> response = client.toBlocking().exchange(request, Argument.listOf(BookDTO.class));
+        HttpResponse<?> response = exchange(request, Argument.listOf(DeserializableBookDTO.class));
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatus());
         Assertions.assertEquals(new ArrayList<BookDTO>(), response.body());
@@ -54,9 +53,10 @@ public class TestBookController {
         BookDTO b1 = new BookDTO("isbn1", "title1", "author1", "description1");
         BookDTO b2 = new BookDTO("isbn2", "title2", "author2", "description2");
         postBooks(Arrays.asList(b1, b2));
-        HttpRequest<?> request = HttpRequest.GET("/books");
+        HttpRequest<?> request = HttpRequest.GET("/v1/books");
 
-        HttpResponse<List<BookDTO>> response = client.toBlocking().exchange(request, Argument.listOf(BookDTO.class));
+        HttpResponse<List<DeserializableBookDTO>> response = exchange(request,
+                Argument.listOf(DeserializableBookDTO.class));
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatus());
         Assertions.assertNotNull(response.body());
@@ -67,9 +67,9 @@ public class TestBookController {
 
     @Test
     public void getOneWhenEmpty() {
-        HttpRequest<?> request = HttpRequest.GET("/books/unexistent_isbn");
+        HttpRequest<?> request = HttpRequest.GET("/v1/books/unexistent_isbn");
 
-        HttpResponse<JsonError> response = client.toBlocking().exchange(request, Argument.of(JsonError.class));
+        HttpResponse<?> response = exchange(request, Argument.of(DeserializableBookDTO.class));
 
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
         Assertions.assertEquals(false, response.getBody().isPresent());
@@ -80,9 +80,9 @@ public class TestBookController {
         BookDTO b1 = new BookDTO("isbn1", "title1", "author1", "description1");
         BookDTO b2 = new BookDTO("isbn2", "title2", "author2", "description2");
         postBooks(Arrays.asList(b1, b2));
-        HttpRequest<?> request = HttpRequest.GET("/books/isbn1");
+        HttpRequest<?> request = HttpRequest.GET("/v1/books/isbn1");
 
-        HttpResponse<BookDTO> response = client.toBlocking().exchange(request, Argument.of(BookDTO.class));
+        HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatus());
         Assertions.assertEquals(b1.toString(), response.body().toString());
@@ -91,9 +91,9 @@ public class TestBookController {
     @Test
     public void post() {
         BookDTO requestBody = new BookDTO("isbn1", "title1", "author1", "description1");
-        HttpRequest<BookDTO> request = HttpRequest.POST("/books", requestBody);
+        HttpRequest<BookDTO> request = HttpRequest.POST("/v1/books", requestBody);
 
-        HttpResponse<BookDTO> response = client.toBlocking().exchange(request, Argument.of(BookDTO.class));
+        HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
 
         Assertions.assertEquals(HttpStatus.CREATED, response.getStatus());
         Assertions.assertEquals(requestBody.toString(), response.body().toString());
@@ -106,17 +106,27 @@ public class TestBookController {
         postBooks(Arrays.asList(b1, b2));
 
         BookDTO requestBody = new BookDTO("isbn1", "title1", "author1", "description1");
-        HttpRequest<BookDTO> request = HttpRequest.POST("/books", requestBody);
+        HttpRequest<BookDTO> request = HttpRequest.POST("/v1/books", requestBody);
 
-        HttpResponse<JsonError> response = client.toBlocking().exchange(request, Argument.of(JsonError.class));
+        HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
 
-        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatus());
+        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatus());
         Assertions.assertEquals(false, response.getBody().isPresent());
     }
 
     private void postBooks(List<BookDTO> books) {
-        books.forEach(b -> {
-            client.toBlocking().exchange(HttpRequest.POST("/books", b), Argument.of(BookDTO.class));
+        books.forEach(book -> {
+            exchange(HttpRequest.POST("/v1/books", book), Argument.of(DeserializableBookDTO.class));
         });
+    }
+
+    private <I, O> HttpResponse<O> exchange(HttpRequest<I> request, Argument<O> bodyType) {
+        return client.toBlocking().exchange(request, bodyType, bodyType);
+    }
+}
+
+class DeserializableBookDTO extends BookDTO {
+    public DeserializableBookDTO() {
+        super(null, null, null, null);
     }
 }

@@ -3,7 +3,7 @@ package org.example;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.example.application.ports.out.BookRepositoryPort;
+import org.example.application.ports.out.BooksRepositoryPort;
 import org.example.application.usecases.AddBookUseCase;
 import org.example.application.usecases.GetBookUseCase;
 import org.example.application.usecases.ListAllBookUseCase;
@@ -23,19 +23,19 @@ class BeanFactory {
 
     @Bean
     @Named
-    AddBookUseCase createAddBook(@Singleton BookRepositoryPort bookRepository) {
-        return new AddBookUseCase(bookRepository);
+    AddBookUseCase createAddBook(@Singleton BooksRepositoryPort booksRepository) {
+        return new AddBookUseCase(booksRepository);
     }
 
     @Bean
     @Named
-    GetBookUseCase createGetBookUseCase(@Singleton BookRepositoryPort bookRepository) {
-        return new GetBookUseCase(bookRepository);
+    GetBookUseCase createGetBookUseCase(@Singleton BooksRepositoryPort booksRepository) {
+        return new GetBookUseCase(booksRepository);
     }
 
     @Bean
     @Named
-    ListAllBookUseCase createListAllBookUseCase(@Singleton BookRepositoryPort bookRepository) {
-        return new ListAllBookUseCase(bookRepository);
+    ListAllBookUseCase createListAllBookUseCase(@Singleton BooksRepositoryPort booksRepository) {
+        return new ListAllBookUseCase(booksRepository);
     }
 }

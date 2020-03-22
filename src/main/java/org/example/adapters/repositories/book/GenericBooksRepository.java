@@ -7,7 +7,7 @@ import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.GenericRepository;
 
 @Repository
-interface GenericBookRepository extends GenericRepository<BookModel, Long> {
+interface GenericBooksRepository extends GenericRepository<BookModel, Long> {
 
     List<BookModel> findAll();
 

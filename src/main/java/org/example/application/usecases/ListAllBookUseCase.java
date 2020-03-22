@@ -4,18 +4,18 @@ import java.util.List;
 
 import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.in.ListAllBookUseCasePort;
-import org.example.application.ports.out.BookRepositoryPort;
+import org.example.application.ports.out.BooksRepositoryPort;
 
 public class ListAllBookUseCase implements ListAllBookUseCasePort {
 
-    private BookRepositoryPort bookRepository;
+    private BooksRepositoryPort booksRepository;
 
-    public ListAllBookUseCase(BookRepositoryPort bookRepository) {
-        this.bookRepository = bookRepository;
+    public ListAllBookUseCase(BooksRepositoryPort booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
     @Override
     public List<BookDTO> execute() {
-        return bookRepository.findAll();
+        return booksRepository.findAll();
     }
 }

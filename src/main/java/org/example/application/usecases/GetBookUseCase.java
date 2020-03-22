@@ -5,19 +5,19 @@ import java.util.Optional;
 import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.in.GetBookUseCasePort;
 import org.example.application.ports.in.IsbnNotExistsException;
-import org.example.application.ports.out.BookRepositoryPort;
+import org.example.application.ports.out.BooksRepositoryPort;
 
 public class GetBookUseCase implements GetBookUseCasePort {
 
-    private BookRepositoryPort bookRepository;
+    private BooksRepositoryPort booksRepository;
 
-    public GetBookUseCase(BookRepositoryPort bookRepository) {
-        this.bookRepository = bookRepository;
+    public GetBookUseCase(BooksRepositoryPort booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
     @Override
     public BookDTO execute(String isbn) throws IsbnNotExistsException {
-        Optional<BookDTO> book = bookRepository.findByIsbn(isbn);
+        Optional<BookDTO> book = booksRepository.findByIsbn(isbn);
 
         if (!book.isPresent()) {
             throw new IsbnNotExistsException(isbn);

@@ -24,14 +24,14 @@ import io.micronaut.http.annotation.Produces;
 @Controller("/v1/books")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class BookController {
+public class BooksController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BooksController.class);
     private AddBookUseCasePort addBookUseCase;
     private GetBookUseCasePort getBookUseCase;
     private ListAllBookUseCasePort listAllBookUseCase;
 
-    public BookController(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
+    public BooksController(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
             ListAllBookUseCasePort listAllBookUseCase) {
         this.addBookUseCase = addBookUseCase;
         this.getBookUseCase = getBookUseCase;
@@ -39,7 +39,7 @@ public class BookController {
     }
 
     @Post("/")
-    public HttpResponse<BookDTO> add(HttpRequest<BookScheme> request) {
+    public HttpResponse<BookDTO> add(HttpRequest<AddBookRequest> request) {
         LOGGER.info("{}, body={}", request.toString(), request.getBody());
 
         if (!request.getBody().isPresent()) {
@@ -47,7 +47,7 @@ public class BookController {
             return HttpResponse.status(HttpStatus.BAD_REQUEST);
         }
 
-        BookScheme body = request.getBody().get();
+        AddBookRequest body = request.getBody().get();
 
         try {
             BookDTO book = addBookUseCase.execute(new BookDTO(body.isbn, body.title, body.author, body.description));

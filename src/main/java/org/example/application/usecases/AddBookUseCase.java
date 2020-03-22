@@ -4,15 +4,15 @@ import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.dtos.BookDTOTranslator;
 import org.example.application.ports.in.AddBookUseCasePort;
 import org.example.application.ports.in.IsbnAlreadyExistsException;
-import org.example.application.ports.out.BookRepositoryPort;
+import org.example.application.ports.out.BooksRepositoryPort;
 import org.example.domain.Book;
 
 public class AddBookUseCase implements AddBookUseCasePort {
 
-    private BookRepositoryPort bookRepository;
+    private BooksRepositoryPort booksRepository;
 
-    public AddBookUseCase(BookRepositoryPort bookRepository) {
-        this.bookRepository = bookRepository;
+    public AddBookUseCase(BooksRepositoryPort booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
     @Override
@@ -20,10 +20,10 @@ public class AddBookUseCase implements AddBookUseCasePort {
 
         Book book = BookDTOTranslator.fromDTO(bookData);
 
-        if (bookRepository.findByIsbn(book.getIsbn()).isPresent()) {
+        if (booksRepository.findByIsbn(book.getIsbn()).isPresent()) {
             throw new IsbnAlreadyExistsException(book.getIsbn());
         }
 
-        return bookRepository.create(BookDTOTranslator.toDTO(book));
+        return booksRepository.create(BookDTOTranslator.toDTO(book));
     }
 }
