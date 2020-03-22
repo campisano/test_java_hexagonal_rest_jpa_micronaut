@@ -1,32 +1,29 @@
 package org.example.application.usecases;
 
-import javax.inject.Named;
-
 import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.dtos.BookDTOTranslator;
 import org.example.application.ports.in.AddBookUseCasePort;
 import org.example.application.ports.in.IsbnAlreadyExistsException;
-import org.example.application.ports.out.BookPersistencePort;
+import org.example.application.ports.out.BookRepositoryPort;
 import org.example.domain.Book;
 
-@Named
 public class AddBookUseCase implements AddBookUseCasePort {
 
-    private BookPersistencePort bookPersistencePort;
+    private BookRepositoryPort bookRepository;
 
-    public AddBookUseCase(BookPersistencePort bookPersistencePort) {
-        this.bookPersistencePort = bookPersistencePort;
+    public AddBookUseCase(BookRepositoryPort bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
-    public BookDTO execute(BookDTO bookDTO) throws IsbnAlreadyExistsException {
+    public BookDTO execute(BookDTO bookData) throws IsbnAlreadyExistsException {
 
-        Book book = BookDTOTranslator.fromDTO(bookDTO);
+        Book book = BookDTOTranslator.fromDTO(bookData);
 
-        if (bookPersistencePort.findByIsbn(book.getIsbn()).isPresent()) {
+        if (bookRepository.findByIsbn(book.getIsbn()).isPresent()) {
             throw new IsbnAlreadyExistsException(book.getIsbn());
         }
 
-        return bookPersistencePort.create(BookDTOTranslator.toDTO(book));
+        return bookRepository.create(BookDTOTranslator.toDTO(book));
     }
 }

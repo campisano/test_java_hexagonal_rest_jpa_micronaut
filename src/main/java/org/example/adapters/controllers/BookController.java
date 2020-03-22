@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.in.AddBookUseCasePort;
-import org.example.application.ports.in.GetAllBookUseCasePort;
 import org.example.application.ports.in.GetBookUseCasePort;
 import org.example.application.ports.in.IsbnAlreadyExistsException;
 import org.example.application.ports.in.IsbnNotExistsException;
+import org.example.application.ports.in.ListAllBookUseCasePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,13 +29,13 @@ public class BookController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
     private AddBookUseCasePort addBookUseCase;
     private GetBookUseCasePort getBookUseCase;
-    private GetAllBookUseCasePort getAllBookUseCase;
+    private ListAllBookUseCasePort listAllBookUseCase;
 
     public BookController(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
-            GetAllBookUseCasePort getAllBookUseCase) {
+            ListAllBookUseCasePort listAllBookUseCase) {
         this.addBookUseCase = addBookUseCase;
         this.getBookUseCase = getBookUseCase;
-        this.getAllBookUseCase = getAllBookUseCase;
+        this.listAllBookUseCase = listAllBookUseCase;
     }
 
     @Post("/")
@@ -80,12 +80,12 @@ public class BookController {
     }
 
     @Get("/")
-    public HttpResponse<List<BookDTO>> getAll(HttpRequest<?> request) {
+    public HttpResponse<List<BookDTO>> listAll(HttpRequest<?> request) {
         LOGGER.info("{}", request.toString());
 
         try {
             LOGGER.info("ok");
-            return HttpResponse.ok(getAllBookUseCase.execute());
+            return HttpResponse.ok(listAllBookUseCase.execute());
         } catch (Exception exception) {
             LOGGER.error("exception, message={}", exception.toString());
             return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);

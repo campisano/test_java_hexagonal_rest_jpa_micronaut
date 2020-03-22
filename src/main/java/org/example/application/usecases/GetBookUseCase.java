@@ -2,25 +2,22 @@ package org.example.application.usecases;
 
 import java.util.Optional;
 
-import javax.inject.Named;
-
 import org.example.application.ports.dtos.BookDTO;
 import org.example.application.ports.in.GetBookUseCasePort;
 import org.example.application.ports.in.IsbnNotExistsException;
-import org.example.application.ports.out.BookPersistencePort;
+import org.example.application.ports.out.BookRepositoryPort;
 
-@Named
 public class GetBookUseCase implements GetBookUseCasePort {
 
-    private BookPersistencePort bookPersistencePort;
+    private BookRepositoryPort bookRepository;
 
-    public GetBookUseCase(BookPersistencePort bookPersistencePort) {
-        this.bookPersistencePort = bookPersistencePort;
+    public GetBookUseCase(BookRepositoryPort bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
     public BookDTO execute(String isbn) throws IsbnNotExistsException {
-        Optional<BookDTO> book = bookPersistencePort.findByIsbn(isbn);
+        Optional<BookDTO> book = bookRepository.findByIsbn(isbn);
 
         if (!book.isPresent()) {
             throw new IsbnNotExistsException(isbn);

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.example.application.ports.dtos.BookDTO;
 
-public interface BookPersistencePort {
+public interface BookRepositoryPort {
 
     BookDTO create(BookDTO dto);
 
@@ -14,6 +14,4 @@ public interface BookPersistencePort {
     List<BookDTO> findAll();
 
     Optional<BookDTO> findByIsbn(String isbn);
-
-    boolean existBookWithIsbn(String isbn);
 }

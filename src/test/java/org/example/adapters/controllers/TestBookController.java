@@ -40,7 +40,7 @@ public class TestBookController {
     }
 
     @Test
-    public void getAllWhenEmpty() {
+    public void listAllWhenEmpty() {
         HttpRequest<?> request = HttpRequest.GET("/books");
 
         HttpResponse<?> response = client.toBlocking().exchange(request, Argument.listOf(BookDTO.class));
@@ -50,7 +50,7 @@ public class TestBookController {
     }
 
     @Test
-    public void getAllWhenExists() {
+    public void listAllWhenExists() {
         BookDTO b1 = new BookDTO("isbn1", "title1", "author1", "description1");
         BookDTO b2 = new BookDTO("isbn2", "title2", "author2", "description2");
         postBooks(Arrays.asList(b1, b2));

@@ -4,26 +4,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.inject.Singleton;
 import javax.transaction.Transactional;
 
 import org.example.application.ports.dtos.BookDTO;
-import org.example.application.ports.out.BookPersistencePort;
+import org.example.application.ports.out.BookRepositoryPort;
 
-@Singleton
-public class BookRepositoryAdapter implements BookPersistencePort {
+public class BookRepositoryAdapter implements BookRepositoryPort {
 
-    private BookRepositoryJPA bookRepositoryJPA;
+    private GenericBookRepository bookRepository;
 
-    public BookRepositoryAdapter(BookRepositoryJPA bookRepositoryJPA) {
-        this.bookRepositoryJPA = bookRepositoryJPA;
+    public BookRepositoryAdapter(GenericBookRepository bookRepositoryJPA) {
+        this.bookRepository = bookRepositoryJPA;
     }
 
     @Override
     public BookDTO create(BookDTO dto) {
         BookModel model = BookModelTranslator.fromDTO(dto);
 
-        model = bookRepositoryJPA.save(model);
+        model = bookRepository.save(model);
 
         return BookModelTranslator.toDTO(model);
     }
@@ -35,7 +33,7 @@ public class BookRepositoryAdapter implements BookPersistencePort {
             throw new RuntimeException("Isbn cannot be null");
         }
 
-        Optional<BookModel> optModel = bookRepositoryJPA.findByIsbn(dto.getIsbn());
+        Optional<BookModel> optModel = bookRepository.findByIsbn(dto.getIsbn());
         if (!optModel.isPresent()) {
             throw new RuntimeException("No book exist with specified isbn " + dto.getIsbn());
         }
@@ -46,29 +44,24 @@ public class BookRepositoryAdapter implements BookPersistencePort {
         model.setAuthor(dto.getAuthor());
         model.setDescription(dto.getDescription());
 
-        model = bookRepositoryJPA.save(model);
+        model = bookRepository.save(model);
 
         return BookModelTranslator.toDTO(model);
     }
 
     @Override
     public List<BookDTO> findAll() {
-        return bookRepositoryJPA.findAll().stream().map(BookModelTranslator::toDTO).collect(Collectors.toList());
+        return bookRepository.findAll().stream().map(BookModelTranslator::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public Optional<BookDTO> findByIsbn(String isbn) {
-        Optional<BookModel> optModel = bookRepositoryJPA.findByIsbn(isbn);
+        Optional<BookModel> optModel = bookRepository.findByIsbn(isbn);
 
         if (!optModel.isPresent()) {
             return Optional.<BookDTO>empty();
         }
 
         return Optional.of(BookModelTranslator.toDTO(optModel.get()));
-    }
-
-    @Override
-    public boolean existBookWithIsbn(String isbn) {
-        return bookRepositoryJPA.findByIsbn(isbn).isPresent();
     }
 }
