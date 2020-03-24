@@ -3,6 +3,7 @@ package org.example.application.usecases;
 import java.util.Optional;
 
 import org.example.application.dtos.BookDTO;
+import org.example.application.exceptions.BookInvalidException;
 import org.example.application.exceptions.IsbnAlreadyExistsException;
 import org.example.application.ports.MockedBooksRepositoryPort;
 import org.example.application.ports.in.AddBookUseCasePort;
@@ -59,6 +60,36 @@ public class TestAddBookUseCase {
 
         Assertions.assertThrows(IsbnAlreadyExistsException.class, () -> {
             addBookUseCase.execute(sampleBookDto);
+        });
+    }
+
+    @Test
+    void when_add_invalid_isbn_then_throw_exception() throws Exception {
+        BookDTO invalidBook = new BookDTO(null, "title", "author", "desc");
+        booksRepository.findByIsbn_out = Optional.empty();
+
+        Assertions.assertThrows(BookInvalidException.class, () -> {
+            addBookUseCase.execute(invalidBook);
+        });
+    }
+
+    @Test
+    void when_add_invalid_title_then_throw_exception() throws Exception {
+        BookDTO invalidBook = new BookDTO("isbn", null, "author", "desc");
+        booksRepository.findByIsbn_out = Optional.empty();
+
+        Assertions.assertThrows(BookInvalidException.class, () -> {
+            addBookUseCase.execute(invalidBook);
+        });
+    }
+
+    @Test
+    void when_add_invalid_author_then_throw_exception() throws Exception {
+        BookDTO invalidBook = new BookDTO("isbn", "title", null, "desc");
+        booksRepository.findByIsbn_out = Optional.empty();
+
+        Assertions.assertThrows(BookInvalidException.class, () -> {
+            addBookUseCase.execute(invalidBook);
         });
     }
 }

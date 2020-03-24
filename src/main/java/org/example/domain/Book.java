@@ -1,6 +1,8 @@
 package org.example.domain;
 
-import java.util.Objects;
+import java.text.MessageFormat;
+
+import org.example.application.exceptions.BookInvalidException;
 
 public class Book {
     private String isbn;
@@ -8,7 +10,7 @@ public class Book {
     private String author;
     private String description;
 
-    public Book(String isbn, String title, String author, String description) {
+    public Book(String isbn, String title, String author, String description) throws BookInvalidException {
         ensureCreable(isbn, title, author, description);
         this.isbn = isbn;
         this.title = title;
@@ -32,9 +34,18 @@ public class Book {
         return description;
     }
 
-    private static void ensureCreable(String isbn, String title, String author, String description) {
-        Objects.requireNonNull(isbn, "Isbn cannot be null");
-        Objects.requireNonNull(title, "title cannot be null");
-        Objects.requireNonNull(author, "Author cannot be null");
+    private static void ensureCreable(String isbn, String title, String author, String description)
+            throws BookInvalidException {
+        if (isbn == null || isbn.length() == 0) {
+            throw new BookInvalidException(MessageFormat.format("Isbn {0} is invalid", isbn));
+        }
+
+        if (title == null || title.length() == 0) {
+            throw new BookInvalidException(MessageFormat.format("Title {0} is invalid", title));
+        }
+
+        if (author == null || author.length() == 0) {
+            throw new BookInvalidException(MessageFormat.format("Author {0} is invalid", author));
+        }
     }
 }

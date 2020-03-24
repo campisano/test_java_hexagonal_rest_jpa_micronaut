@@ -1,10 +1,11 @@
 package org.example.application.dtos;
 
+import org.example.application.exceptions.BookInvalidException;
 import org.example.domain.Book;
 
 public class BookDTOTranslator {
 
-    public static Book fromDTO(BookDTO dto) {
+    public static Book fromDTO(BookDTO dto) throws BookInvalidException {
         return new Book(dto.getIsbn(), dto.getTitle(), dto.getAuthor(), dto.getDescription());
     }
 

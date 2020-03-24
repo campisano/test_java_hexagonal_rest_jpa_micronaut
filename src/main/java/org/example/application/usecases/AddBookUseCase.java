@@ -2,6 +2,7 @@ package org.example.application.usecases;
 
 import org.example.application.dtos.BookDTO;
 import org.example.application.dtos.BookDTOTranslator;
+import org.example.application.exceptions.BookInvalidException;
 import org.example.application.exceptions.IsbnAlreadyExistsException;
 import org.example.application.ports.in.AddBookUseCasePort;
 import org.example.application.ports.out.BooksRepositoryPort;
@@ -16,7 +17,7 @@ public class AddBookUseCase implements AddBookUseCasePort {
     }
 
     @Override
-    public BookDTO execute(BookDTO bookDto) throws IsbnAlreadyExistsException {
+    public BookDTO execute(BookDTO bookDto) throws IsbnAlreadyExistsException, BookInvalidException {
 
         Book book = BookDTOTranslator.fromDTO(bookDto);
 

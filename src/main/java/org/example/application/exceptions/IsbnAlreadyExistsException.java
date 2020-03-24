@@ -2,7 +2,7 @@ package org.example.application.exceptions;
 
 import java.text.MessageFormat;
 
-public class IsbnAlreadyExistsException extends RuntimeException {
+public class IsbnAlreadyExistsException extends Exception {
     private static final long serialVersionUID = 1L;
 
     public IsbnAlreadyExistsException(String isbn) {
