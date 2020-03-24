@@ -1,4 +1,4 @@
-package org.example.adapters.in.controllers;
+package org.example.adapters.in;
 
 import java.time.Duration;
 import java.util.ArrayList;

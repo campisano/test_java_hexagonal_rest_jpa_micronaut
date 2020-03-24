@@ -1,4 +1,4 @@
-package org.example.adapters.in.controllers.utils;
+package org.example.adapters.in.details;
 
 import java.text.MessageFormat;
 import java.util.Objects;

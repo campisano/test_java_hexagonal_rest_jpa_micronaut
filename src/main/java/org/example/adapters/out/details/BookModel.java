@@ -1,4 +1,4 @@
-package org.example.adapters.out.repositories.book;
+package org.example.adapters.out.details;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "book")
-class BookModel {
+public class BookModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ class BookModel {
         return id;
     }
 
-    void setId(long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -48,7 +48,7 @@ class BookModel {
         return isbn;
     }
 
-    void setIsbn(String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -56,7 +56,7 @@ class BookModel {
         return title;
     }
 
-    void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -64,7 +64,7 @@ class BookModel {
         return author;
     }
 
-    void setAuthor(String author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
@@ -72,7 +72,7 @@ class BookModel {
         return description;
     }
 
-    void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 }

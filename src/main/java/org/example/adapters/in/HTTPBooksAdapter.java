@@ -1,7 +1,8 @@
-package org.example.adapters.in.controllers;
+package org.example.adapters.in;
 
 import java.util.List;
 
+import org.example.adapters.in.details.AddBookRequest;
 import org.example.application.dtos.BookDTO;
 import org.example.application.exceptions.IsbnAlreadyExistsException;
 import org.example.application.exceptions.IsbnNotExistsException;
