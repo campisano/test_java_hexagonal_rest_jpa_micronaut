@@ -8,7 +8,7 @@ import org.example.application.exceptions.IsbnAlreadyExistsException;
 import org.example.application.exceptions.IsbnNotExistsException;
 import org.example.application.ports.in.AddBookUseCasePort;
 import org.example.application.ports.in.GetBookUseCasePort;
-import org.example.application.ports.in.ListAllBookUseCasePort;
+import org.example.application.ports.in.ListAllBooksUseCasePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +30,13 @@ public class HTTPBooksAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(HTTPBooksAdapter.class);
     private AddBookUseCasePort addBookUseCase;
     private GetBookUseCasePort getBookUseCase;
-    private ListAllBookUseCasePort listAllBookUseCase;
+    private ListAllBooksUseCasePort listAllBooksUseCase;
 
     public HTTPBooksAdapter(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
-            ListAllBookUseCasePort listAllBookUseCase) {
+            ListAllBooksUseCasePort listAllBooksUseCase) {
         this.addBookUseCase = addBookUseCase;
         this.getBookUseCase = getBookUseCase;
-        this.listAllBookUseCase = listAllBookUseCase;
+        this.listAllBooksUseCase = listAllBooksUseCase;
     }
 
     @Post("/")
@@ -85,7 +85,7 @@ public class HTTPBooksAdapter {
         LOGGER.info("{}", request.toString());
 
         try {
-            List<BookDTO> books = listAllBookUseCase.execute();
+            List<BookDTO> books = listAllBooksUseCase.execute();
             LOGGER.info("ok");
             return HttpResponse.ok(books);
         } catch (Exception exception) {

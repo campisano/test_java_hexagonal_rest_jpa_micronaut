@@ -8,7 +8,6 @@ import io.micronaut.data.repository.GenericRepository;
 
 @Repository
 public interface BooksModelRepository extends GenericRepository<BookModel, Long> {
-
     public List<BookModel> findAll();
 
     public Optional<BookModel> findByIsbn(String isbn);

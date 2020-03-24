@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 import org.example.application.ports.out.BooksRepositoryPort;
 import org.example.application.usecases.AddBookUseCase;
 import org.example.application.usecases.GetBookUseCase;
-import org.example.application.usecases.ListAllBookUseCase;
+import org.example.application.usecases.ListAllBooksUseCase;
 
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
@@ -35,7 +35,7 @@ class BeanFactory {
 
     @Bean
     @Named
-    ListAllBookUseCase createListAllBookUseCase(@Singleton BooksRepositoryPort booksRepository) {
-        return new ListAllBookUseCase(booksRepository);
+    ListAllBooksUseCase createListAllBooksUseCase(@Singleton BooksRepositoryPort booksRepository) {
+        return new ListAllBooksUseCase(booksRepository);
     }
 }

@@ -4,6 +4,6 @@ import java.util.List;
 
 import org.example.application.dtos.BookDTO;
 
-public interface ListAllBookUseCasePort {
+public interface ListAllBooksUseCasePort {
     List<BookDTO> execute();
 }
