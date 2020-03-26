@@ -9,20 +9,8 @@
         </encoder>
     </appender>
 
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
-
-    <logger name="org.hibernate" level="WARN" />
-    <logger name="com.zaxxer.hikari" level="INFO" />
-    <logger name="io.netty" level="INFO" />
-    <logger name="io.micronaut.context.AbstractBeanDefinitionReference" level="INFO" />
-    <logger name="io.micronaut.context.condition.Condition" level="INFO" />
-    <logger name="io.micronaut.context.DefaultBeanContext" level="INFO" />
-    <logger name="io.micronaut.context.event" level="INFO" />
-    <logger name="io.micronaut.context.env.PropertySourcePropertyResolver" level="INFO" />
-    <logger name="io.micronaut.context.lifecycle" level="INFO" />
-    <logger name="io.micronaut.core.reflect" level="INFO" />
-    <logger name="io.micronaut.management" level="INFO" />
 
 </configuration>
