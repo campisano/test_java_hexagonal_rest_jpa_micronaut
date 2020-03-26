@@ -1,8 +1,7 @@
-package org.example.adapters.in;
+package org.example.adapters.in.controllers;
 
 import java.util.List;
 
-import org.example.adapters.in.details.AddBookRequest;
 import org.example.application.dtos.BookDTO;
 import org.example.application.exceptions.IsbnAlreadyExistsException;
 import org.example.application.exceptions.IsbnNotExistsException;
@@ -12,6 +11,7 @@ import org.example.application.ports.in.ListAllBooksUseCasePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -25,14 +25,14 @@ import io.micronaut.http.annotation.Produces;
 @Controller("/v1/books")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class HTTPBooksAdapter {
+public class HTTPBooksController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HTTPBooksAdapter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HTTPBooksController.class);
     private AddBookUseCasePort addBookUseCase;
     private GetBookUseCasePort getBookUseCase;
     private ListAllBooksUseCasePort listAllBooksUseCase;
 
-    public HTTPBooksAdapter(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
+    public HTTPBooksController(AddBookUseCasePort addBookUseCase, GetBookUseCasePort getBookUseCase,
             ListAllBooksUseCasePort listAllBooksUseCase) {
         this.addBookUseCase = addBookUseCase;
         this.getBookUseCase = getBookUseCase;
@@ -51,7 +51,8 @@ public class HTTPBooksAdapter {
         AddBookRequest body = request.getBody().get();
 
         try {
-            BookDTO book = addBookUseCase.execute(new BookDTO(body.isbn, body.title, body.author, body.description));
+            BookDTO book = addBookUseCase
+                    .execute(new BookDTO(body.getIsbn(), body.getTitle(), body.getAuthor(), body.getDescription()));
             LOGGER.info("created, book={}", book);
             return HttpResponse.created(book);
         } catch (IsbnAlreadyExistsException exception) {
@@ -92,5 +93,13 @@ public class HTTPBooksAdapter {
             LOGGER.error("exception, message={}", exception.toString());
             return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+}
+
+@Introspected
+class AddBookRequest extends BookDTO {
+
+    public AddBookRequest(String isbn, String title, String author, String description) {
+        super(isbn, title, author, description);
     }
 }

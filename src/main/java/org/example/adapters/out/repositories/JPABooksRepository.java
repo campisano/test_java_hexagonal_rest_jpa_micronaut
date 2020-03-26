@@ -1,4 +1,4 @@
-package org.example.adapters.out;
+package org.example.adapters.out.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,17 +6,19 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.example.adapters.out.details.BookModel;
-import org.example.adapters.out.details.BookModelTranslator;
-import org.example.adapters.out.details.BooksModelRepository;
+import org.example.adapters.out.repositories.models.BookModel;
+import org.example.adapters.out.repositories.models.BookModelTranslator;
 import org.example.application.dtos.BookDTO;
 import org.example.application.ports.out.BooksRepositoryPort;
 
-public class JPABooksRepositoryAdapter implements BooksRepositoryPort {
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.GenericRepository;
 
-    private BooksModelRepository repository;
+public class JPABooksRepository implements BooksRepositoryPort {
 
-    public JPABooksRepositoryAdapter(BooksModelRepository repository) {
+    private MicronautBooksRepository repository;
+
+    public JPABooksRepository(MicronautBooksRepository repository) {
         this.repository = repository;
     }
 
@@ -67,4 +69,13 @@ public class JPABooksRepositoryAdapter implements BooksRepositoryPort {
 
         return Optional.of(BookModelTranslator.toDTO(optModel.get()));
     }
+}
+
+@Repository
+interface MicronautBooksRepository extends GenericRepository<BookModel, Long> {
+    public List<BookModel> findAll();
+
+    public Optional<BookModel> findByIsbn(String isbn);
+
+    public BookModel save(BookModel model);
 }

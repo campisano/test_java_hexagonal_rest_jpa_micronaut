@@ -1,4 +1,4 @@
-package org.example.adapters.in.details;
+package org.example.adapters.in.controllers;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -19,9 +19,9 @@ import io.micronaut.http.server.exceptions.ExceptionHandler;
 @Singleton
 @Requires(classes = { Exception.class, ExceptionHandler.class })
 @SuppressWarnings("rawtypes")
-public class GlobalExceptionHandler implements ExceptionHandler<Exception, HttpResponse> {
+public class HTTPExceptionsController implements ExceptionHandler<Exception, HttpResponse> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HTTPExceptionsController.class);
 
     @Override
     public HttpResponse<?> handle(HttpRequest request, Exception exception) {

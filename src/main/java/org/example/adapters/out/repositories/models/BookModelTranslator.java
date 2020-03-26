@@ -1,4 +1,4 @@
-package org.example.adapters.out.details;
+package org.example.adapters.out.repositories.models;
 
 import org.example.application.dtos.BookDTO;
 
