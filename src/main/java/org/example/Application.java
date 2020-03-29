@@ -1,6 +1,5 @@
 package org.example;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.example.application.ports.out.BooksRepositoryPort;
@@ -8,8 +7,6 @@ import org.example.application.usecases.AddBookUseCase;
 import org.example.application.usecases.GetBookUseCase;
 import org.example.application.usecases.ListAllBooksUseCase;
 
-import io.micronaut.context.annotation.Bean;
-import io.micronaut.context.annotation.Factory;
 import io.micronaut.runtime.Micronaut;
 
 public class Application {
@@ -18,24 +15,25 @@ public class Application {
     }
 }
 
-@Factory
-class BeanFactory {
-
-    @Bean
-    @Named
-    AddBookUseCase createAddBook(@Singleton BooksRepositoryPort booksRepository) {
-        return new AddBookUseCase(booksRepository);
+@Singleton
+class SingletonAddBookUseCase extends AddBookUseCase {
+    public SingletonAddBookUseCase(BooksRepositoryPort booksRepository) {
+        super(booksRepository);
     }
 
-    @Bean
-    @Named
-    GetBookUseCase createGetBookUseCase(@Singleton BooksRepositoryPort booksRepository) {
-        return new GetBookUseCase(booksRepository);
+}
+
+@Singleton
+class SingletonGetBookUseCase extends GetBookUseCase {
+    public SingletonGetBookUseCase(BooksRepositoryPort booksRepository) {
+        super(booksRepository);
+    }
+}
+
+@Singleton
+class SingletonListAllBooksUseCase extends ListAllBooksUseCase {
+    public SingletonListAllBooksUseCase(BooksRepositoryPort booksRepository) {
+        super(booksRepository);
     }
 
-    @Bean
-    @Named
-    ListAllBooksUseCase createListAllBooksUseCase(@Singleton BooksRepositoryPort booksRepository) {
-        return new ListAllBooksUseCase(booksRepository);
-    }
 }

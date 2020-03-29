@@ -1,4 +1,4 @@
-package org.example.adapters.out.repositories;
+package org.example.adapters.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.example.adapters.out.repositories.models.BookModel;
-import org.example.adapters.out.repositories.models.BookModelTranslator;
+import org.example.adapters.repositories.models.BookModel;
+import org.example.adapters.repositories.models.translators.BookModelTranslator;
 import org.example.application.dtos.BookDTO;
 import org.example.application.ports.out.BooksRepositoryPort;
 

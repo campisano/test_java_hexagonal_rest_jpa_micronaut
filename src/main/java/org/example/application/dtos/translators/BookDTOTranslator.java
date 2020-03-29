@@ -1,5 +1,6 @@
-package org.example.application.dtos;
+package org.example.application.dtos.translators;
 
+import org.example.application.dtos.BookDTO;
 import org.example.application.exceptions.BookInvalidException;
 import org.example.domain.Book;
 

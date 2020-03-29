@@ -1,4 +1,4 @@
-package org.example.adapters.out.repositories.models;
+package org.example.adapters.repositories.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class BookModel {
     BookModel() {
     }
 
-    BookModel(String isbn, String title, String author, String description) {
+    public BookModel(String isbn, String title, String author, String description) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
@@ -40,7 +40,7 @@ public class BookModel {
         return id;
     }
 
-    public void setId(long id) {
+    void setId(long id) {
         this.id = id;
     }
 

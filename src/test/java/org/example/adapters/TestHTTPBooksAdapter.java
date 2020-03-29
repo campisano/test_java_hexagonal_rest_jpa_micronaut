@@ -1,4 +1,4 @@
-package org.example.adapters.in;
+package org.example.adapters;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class TestHTTPBooksAdapter {
         server = ApplicationContext.run(EmbeddedServer.class);
         client = new DefaultHttpClient(server.getURL());
         client.getConfiguration().setExceptionOnErrorStatus(false);
-        client.getConfiguration().setReadTimeout(Duration.ofSeconds(600));
+        client.getConfiguration().setReadTimeout(Duration.ofSeconds(100));
     }
 
     @AfterEach

@@ -1,5 +1,6 @@
-package org.example.adapters.out.repositories.models;
+package org.example.adapters.repositories.models.translators;
 
+import org.example.adapters.repositories.models.BookModel;
 import org.example.application.dtos.BookDTO;
 
 public class BookModelTranslator {

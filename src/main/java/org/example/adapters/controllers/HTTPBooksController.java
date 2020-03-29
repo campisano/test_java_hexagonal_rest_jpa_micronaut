@@ -1,4 +1,4 @@
-package org.example.adapters.in.controllers;
+package org.example.adapters.controllers;
 
 import java.util.List;
 
