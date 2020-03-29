@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
   <artifactId>test_java_micronaut_rest_jpa</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <properties>
     <micronaut.version>1.3.2</micronaut.version>
     <jdk.version>1.8</jdk.version>
@@ -148,6 +148,7 @@
           </execution>
           <execution>
             <id>jacoco-site</id>
+            <phase>test</phase>
             <goals>
               <goal>report</goal>
             </goals>
