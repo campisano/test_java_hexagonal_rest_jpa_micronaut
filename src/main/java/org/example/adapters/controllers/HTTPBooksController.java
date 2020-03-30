@@ -1,8 +1,11 @@
 package org.example.adapters.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.example.application.dtos.BookDTO;
+import org.example.application.exceptions.AuthorInvalidException;
+import org.example.application.exceptions.BookInvalidException;
 import org.example.application.exceptions.IsbnAlreadyExistsException;
 import org.example.application.exceptions.IsbnNotExistsException;
 import org.example.application.ports.in.AddBookUseCasePort;
@@ -52,10 +55,10 @@ public class HTTPBooksController {
 
         try {
             BookDTO book = addBookUseCase
-                    .execute(new BookDTO(body.getIsbn(), body.getTitle(), body.getAuthor(), body.getDescription()));
+                    .execute(new BookDTO(body.getIsbn(), body.getTitle(), body.getAuthors(), body.getDescription()));
             LOGGER.info("created, book={}", book);
             return HttpResponse.created(book);
-        } catch (IsbnAlreadyExistsException exception) {
+        } catch (IsbnAlreadyExistsException | AuthorInvalidException | BookInvalidException exception) {
             LOGGER.error("exception, message={}", exception.getMessage());
             return HttpResponse.status(HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception exception) {
@@ -99,7 +102,7 @@ public class HTTPBooksController {
 @Introspected
 class AddBookRequest extends BookDTO {
 
-    public AddBookRequest(String isbn, String title, String author, String description) {
-        super(isbn, title, author, description);
+    public AddBookRequest(String isbn, String title, Set<String> authors, String description) {
+        super(isbn, title, authors, description);
     }
 }

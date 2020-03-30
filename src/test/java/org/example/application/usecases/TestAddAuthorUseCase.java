@@ -63,8 +63,8 @@ public class TestAddAuthorUseCase {
 
     @Test
     void when_add_null_name_then_throw_exception() throws Exception {
-        AuthorDTO invalidAuthor = new AuthorDTO(null);
         authorsRepository.findByName_out = Optional.empty();
+        AuthorDTO invalidAuthor = new AuthorDTO(null);
 
         Assertions.assertThrows(AuthorInvalidException.class, () -> {
             addAuthorUseCase.execute(invalidAuthor);
@@ -73,8 +73,8 @@ public class TestAddAuthorUseCase {
 
     @Test
     void when_add_empty_name_then_throw_exception() throws Exception {
-        AuthorDTO invalidAuthor = new AuthorDTO("");
         authorsRepository.findByName_out = Optional.empty();
+        AuthorDTO invalidAuthor = new AuthorDTO("");
 
         Assertions.assertThrows(AuthorInvalidException.class, () -> {
             addAuthorUseCase.execute(invalidAuthor);

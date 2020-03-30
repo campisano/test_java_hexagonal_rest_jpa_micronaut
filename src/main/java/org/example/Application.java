@@ -19,8 +19,8 @@ public class Application {
 
 @Singleton
 class SingletonAddBookUseCase extends AddBookUseCase {
-    public SingletonAddBookUseCase(BooksRepositoryPort booksRepository) {
-        super(booksRepository);
+    public SingletonAddBookUseCase(BooksRepositoryPort booksRepository, AuthorsRepositoryPort authorsRepository) {
+        super(booksRepository, authorsRepository);
     }
 
 }

@@ -1,20 +1,21 @@
 package org.example.domain;
 
 import java.text.MessageFormat;
+import java.util.Set;
 
 import org.example.application.exceptions.BookInvalidException;
 
 public class Book {
     private String isbn;
     private String title;
-    private String author;
+    private Set<Author> authors;
     private String description;
 
-    public Book(String isbn, String title, String author, String description) throws BookInvalidException {
-        ensureCreable(isbn, title, author, description);
+    public Book(String isbn, String title, Set<Author> authors, String description) throws BookInvalidException {
+        ensureCreable(isbn, title, authors, description);
         this.isbn = isbn;
         this.title = title;
-        this.author = author;
+        this.authors = authors;
         this.description = description;
     }
 
@@ -26,15 +27,15 @@ public class Book {
         return title;
     }
 
-    public String getAuthor() {
-        return author;
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
     public String getDescription() {
         return description;
     }
 
-    private static void ensureCreable(String isbn, String title, String author, String description)
+    private static void ensureCreable(String isbn, String title, Set<Author> authors, String description)
             throws BookInvalidException {
         if (isbn == null || isbn.length() == 0) {
             throw new BookInvalidException(MessageFormat.format("Isbn {0} is invalid", isbn));
@@ -44,8 +45,9 @@ public class Book {
             throw new BookInvalidException(MessageFormat.format("Title {0} is invalid", title));
         }
 
-        if (author == null || author.length() == 0) {
-            throw new BookInvalidException(MessageFormat.format("Author {0} is invalid", author));
+        if (authors == null || authors.size() == 0) {
+            throw new BookInvalidException(MessageFormat
+                    .format("Book authors are invalid, expected 1 or more authors, requested {0}", authors));
         }
     }
 }

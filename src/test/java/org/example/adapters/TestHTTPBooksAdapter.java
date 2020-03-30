@@ -3,8 +3,10 @@ package org.example.adapters;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
+import org.example.application.dtos.AuthorDTO;
 import org.example.application.dtos.BookDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -50,8 +52,10 @@ public class TestHTTPBooksAdapter {
 
     @Test
     public void listAllWhenExists() {
-        BookDTO b1 = new BookDTO("isbn1", "title1", "author1", "description1");
-        BookDTO b2 = new BookDTO("isbn2", "title2", "author2", "description2");
+        postAuthors(Arrays.asList(new AuthorDTO("author1")));
+        postAuthors(Arrays.asList(new AuthorDTO("author2")));
+        BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
+        BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
         postBooks(Arrays.asList(b1, b2));
         HttpRequest<?> request = HttpRequest.GET("/v1/books");
 
@@ -77,8 +81,10 @@ public class TestHTTPBooksAdapter {
 
     @Test
     public void getOneWhenExist() {
-        BookDTO b1 = new BookDTO("isbn1", "title1", "author1", "description1");
-        BookDTO b2 = new BookDTO("isbn2", "title2", "author2", "description2");
+        postAuthors(Arrays.asList(new AuthorDTO("author1")));
+        postAuthors(Arrays.asList(new AuthorDTO("author2")));
+        BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
+        BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
         postBooks(Arrays.asList(b1, b2));
         HttpRequest<?> request = HttpRequest.GET("/v1/books/isbn1");
 
@@ -90,7 +96,8 @@ public class TestHTTPBooksAdapter {
 
     @Test
     public void post() {
-        BookDTO requestBody = new BookDTO("isbn1", "title1", "author1", "description1");
+        postAuthors(Arrays.asList(new AuthorDTO("author1")));
+        BookDTO requestBody = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
         HttpRequest<BookDTO> request = HttpRequest.POST("/v1/books", requestBody);
 
         HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
@@ -101,17 +108,23 @@ public class TestHTTPBooksAdapter {
 
     @Test
     public void postWhenAlreadyExist() {
-        BookDTO b1 = new BookDTO("isbn1", "title1", "author1", "description1");
-        BookDTO b2 = new BookDTO("isbn2", "title2", "author2", "description2");
+        BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
+        BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
         postBooks(Arrays.asList(b1, b2));
 
-        BookDTO requestBody = new BookDTO("isbn1", "title1", "author1", "description1");
+        BookDTO requestBody = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
         HttpRequest<BookDTO> request = HttpRequest.POST("/v1/books", requestBody);
 
         HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
 
         Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatus());
         Assertions.assertEquals(false, response.getBody().isPresent());
+    }
+
+    private void postAuthors(List<AuthorDTO> authors) {
+        authors.forEach(author -> {
+            exchange(HttpRequest.POST("/v1/authors", author), Argument.of(Object.class));
+        });
     }
 
     private void postBooks(List<BookDTO> books) {

@@ -10,9 +10,6 @@ public class MockedBooksRepositoryPort implements BooksRepositoryPort {
     public BookDTO create_in;
     public BookDTO create_out;
 
-    public BookDTO updateByIsbn_in;
-    public BookDTO updateByIsbn_out;
-
     public List<BookDTO> findAll_out;
 
     public String findByIsbn_in;
@@ -22,12 +19,6 @@ public class MockedBooksRepositoryPort implements BooksRepositoryPort {
     public BookDTO create(BookDTO book) {
         create_in = book;
         return create_out;
-    }
-
-    @Override
-    public BookDTO updateByIsbn(BookDTO book) {
-        updateByIsbn_in = book;
-        return updateByIsbn_out;
     }
 
     @Override

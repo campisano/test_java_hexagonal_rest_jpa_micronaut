@@ -2,6 +2,7 @@ package org.example.adapters.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -16,30 +17,35 @@ import io.micronaut.data.repository.GenericRepository;
 @Singleton
 public class JPAAuthorsRepository implements AuthorsRepositoryPort {
 
-    private MicronautAuthorsRepository repository;
+    private MicronautAuthorsRepository authorsRepository;
 
-    public JPAAuthorsRepository(MicronautAuthorsRepository repository) {
-        this.repository = repository;
+    public JPAAuthorsRepository(MicronautAuthorsRepository authorsRepository) {
+        this.authorsRepository = authorsRepository;
     }
 
     @Override
     public AuthorDTO create(AuthorDTO dto) {
         AuthorModel model = AuthorModelTranslator.fromDTO(dto);
 
-        model = repository.save(model);
+        model = authorsRepository.save(model);
 
         return AuthorModelTranslator.toDTO(model);
     }
 
     @Override
     public Optional<AuthorDTO> findByName(String name) {
-        Optional<AuthorModel> optModel = repository.findByName(name);
+        Optional<AuthorModel> optModel = authorsRepository.findByName(name);
 
         if (!optModel.isPresent()) {
             return Optional.<AuthorDTO>empty();
         }
 
         return Optional.of(AuthorModelTranslator.toDTO(optModel.get()));
+    }
+
+    @Override
+    public Set<AuthorDTO> findByNameIn(Set<String> authorNames) {
+        return AuthorModelTranslator.toDTO(authorsRepository.findByNameIn(authorNames));
     }
 }
 
@@ -50,4 +56,6 @@ interface MicronautAuthorsRepository extends GenericRepository<AuthorModel, Long
     public Optional<AuthorModel> findByName(String name);
 
     public AuthorModel save(AuthorModel model);
+
+    public Set<AuthorModel> findByNameIn(Set<String> authors);
 }

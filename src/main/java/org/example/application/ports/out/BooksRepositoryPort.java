@@ -8,8 +8,6 @@ import org.example.application.dtos.BookDTO;
 public interface BooksRepositoryPort {
     BookDTO create(BookDTO book);
 
-    BookDTO updateByIsbn(BookDTO book);
-
     List<BookDTO> findAll();
 
     Optional<BookDTO> findByIsbn(String isbn);

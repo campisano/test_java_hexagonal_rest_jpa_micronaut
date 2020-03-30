@@ -1,16 +1,19 @@
 package org.example.application.dtos;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class BookDTO {
 
     private String isbn;
     private String title;
-    private String author;
+    private Set<String> authors;
     private String description;
 
-    public BookDTO(String isbn, String title, String author, String description) {
+    public BookDTO(String isbn, String title, Set<String> authors, String description) {
         this.isbn = isbn;
         this.title = title;
-        this.author = author;
+        this.authors = authors != null ? authors : new HashSet<>();
         this.description = description;
     }
 
@@ -22,8 +25,8 @@ public class BookDTO {
         return title;
     }
 
-    public String getAuthor() {
-        return author;
+    public Set<String> getAuthors() {
+        return authors;
     }
 
     public String getDescription() {
@@ -32,7 +35,7 @@ public class BookDTO {
 
     @Override
     public String toString() {
-        return "BookDTO [isbn=" + isbn + ", title=" + title + ", author=" + author + ", description=" + description
+        return "BookDTO [isbn=" + isbn + ", title=" + title + ", authors=" + authors + ", description=" + description
                 + "]";
     }
 }

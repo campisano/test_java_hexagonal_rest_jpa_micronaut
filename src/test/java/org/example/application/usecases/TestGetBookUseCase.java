@@ -1,5 +1,7 @@
 package org.example.application.usecases;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.example.application.dtos.BookDTO;
@@ -13,7 +15,9 @@ import org.junit.jupiter.api.Test;
 public class TestGetBookUseCase {
 
     static final String sampleIsbn = "sample_isbn";
-    static final BookDTO sampleBookDto = new BookDTO(sampleIsbn, "sample_title", "sample_author", "sample_description");
+    static final String sampleAuthorName = "sample_author";
+    static final BookDTO sampleBookDto = new BookDTO(sampleIsbn, "sample_title",
+            new HashSet<>(Arrays.asList(sampleAuthorName)), "sample_description");
 
     MockedBooksRepositoryPort booksRepository;
     GetBookUseCasePort getBookUseCase;

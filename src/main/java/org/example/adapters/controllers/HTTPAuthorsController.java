@@ -2,6 +2,7 @@ package org.example.adapters.controllers;
 
 import org.example.application.dtos.AuthorDTO;
 import org.example.application.exceptions.AuthorAlreadyExistsException;
+import org.example.application.exceptions.AuthorInvalidException;
 import org.example.application.ports.in.AddAuthorUseCasePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class HTTPAuthorsController {
             AuthorDTO author = addAuthorUseCase.execute(new AuthorDTO(body.getName()));
             LOGGER.info("created, author={}", author);
             return HttpResponse.created(author);
-        } catch (AuthorAlreadyExistsException exception) {
+        } catch (AuthorInvalidException | AuthorAlreadyExistsException exception) {
             LOGGER.error("exception, message={}", exception.getMessage());
             return HttpResponse.status(HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception exception) {

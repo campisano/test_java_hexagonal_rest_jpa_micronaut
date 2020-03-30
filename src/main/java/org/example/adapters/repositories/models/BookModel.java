@@ -1,11 +1,18 @@
 package org.example.adapters.repositories.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "book")
@@ -22,17 +29,20 @@ public class BookModel {
     private String title;
 
     @Column(nullable = false)
-    private String author;
+
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<AuthorModel> authors = new HashSet<>();
 
     private String description;
 
     BookModel() {
     }
 
-    public BookModel(String isbn, String title, String author, String description) {
+    public BookModel(String isbn, String title, Set<AuthorModel> authors, String description) {
         this.isbn = isbn;
         this.title = title;
-        this.author = author;
+        this.setAuthor(authors);
         this.description = description;
     }
 
@@ -60,12 +70,12 @@ public class BookModel {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public Set<AuthorModel> getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthor(Set<AuthorModel> authors) {
+        this.authors = authors != null ? authors : new HashSet<>();
     }
 
     public String getDescription() {

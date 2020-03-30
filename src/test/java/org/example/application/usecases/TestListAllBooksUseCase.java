@@ -2,6 +2,7 @@ package org.example.application.usecases;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.example.application.dtos.BookDTO;
@@ -34,8 +35,8 @@ public class TestListAllBooksUseCase {
 
     @Test
     void when_some_then_returns_all() throws Exception {
-        BookDTO book1 = new BookDTO("isbn1", "title1", "author1", "description1");
-        BookDTO book2 = new BookDTO("isbn2", "title2", "author2", "description2");
+        BookDTO book1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
+        BookDTO book2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
         booksRepository.findAll_out = Arrays.asList(book1, book2);
 
         List<BookDTO> books = listllBooksUseCase.execute();
