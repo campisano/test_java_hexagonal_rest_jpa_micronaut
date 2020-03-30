@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Produces;
-import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 
 @Produces
@@ -29,6 +29,6 @@ public class HTTPExceptionsController implements ExceptionHandler<Exception, Htt
         LOGGER.error(MessageFormat.format("Request: {0}, exception: {1}", Objects.toString(request),
                 exception.getMessage()));
 
-        return HttpResponse.<JsonError>serverError().body(new JsonError(exception.getMessage()));
+        return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

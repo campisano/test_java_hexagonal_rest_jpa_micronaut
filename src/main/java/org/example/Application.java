@@ -2,7 +2,9 @@ package org.example;
 
 import javax.inject.Singleton;
 
+import org.example.application.ports.out.AuthorsRepositoryPort;
 import org.example.application.ports.out.BooksRepositoryPort;
+import org.example.application.usecases.AddAuthorUseCase;
 import org.example.application.usecases.AddBookUseCase;
 import org.example.application.usecases.GetBookUseCase;
 import org.example.application.usecases.ListAllBooksUseCase;
@@ -35,5 +37,11 @@ class SingletonListAllBooksUseCase extends ListAllBooksUseCase {
     public SingletonListAllBooksUseCase(BooksRepositoryPort booksRepository) {
         super(booksRepository);
     }
+}
 
+@Singleton
+class SingletonAddAuthorUseCase extends AddAuthorUseCase {
+    public SingletonAddAuthorUseCase(AuthorsRepositoryPort authorsRepository) {
+        super(authorsRepository);
+    }
 }

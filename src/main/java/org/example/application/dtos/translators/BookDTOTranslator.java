@@ -10,7 +10,7 @@ public class BookDTOTranslator {
         return new Book(dto.getIsbn(), dto.getTitle(), dto.getAuthor(), dto.getDescription());
     }
 
-    public static BookDTO toDTO(Book book) {
-        return new BookDTO(book.getIsbn(), book.getTitle(), book.getAuthor(), book.getDescription());
+    public static BookDTO toDTO(Book model) {
+        return new BookDTO(model.getIsbn(), model.getTitle(), model.getAuthor(), model.getDescription());
     }
 }

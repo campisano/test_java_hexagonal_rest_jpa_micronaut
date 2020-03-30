@@ -36,7 +36,6 @@ public class TestAddBookUseCase {
 
     @Test
     void when_add_new_then_call_create() throws Exception {
-        booksRepository.create_out = sampleBookDto;
         booksRepository.findByIsbn_out = Optional.empty();
 
         addBookUseCase.execute(sampleBookDto);
@@ -64,8 +63,18 @@ public class TestAddBookUseCase {
     }
 
     @Test
-    void when_add_invalid_isbn_then_throw_exception() throws Exception {
+    void when_add_null_isbn_then_throw_exception() throws Exception {
         BookDTO invalidBook = new BookDTO(null, "title", "author", "desc");
+        booksRepository.findByIsbn_out = Optional.empty();
+
+        Assertions.assertThrows(BookInvalidException.class, () -> {
+            addBookUseCase.execute(invalidBook);
+        });
+    }
+
+    @Test
+    void when_add_empty_isbn_then_throw_exception() throws Exception {
+        BookDTO invalidBook = new BookDTO("", "title", "author", "desc");
         booksRepository.findByIsbn_out = Optional.empty();
 
         Assertions.assertThrows(BookInvalidException.class, () -> {
