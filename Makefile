@@ -1,4 +1,4 @@
-PROJECT_NAME := test-java-micronaut-rest-jpa
+PROJECT_NAME := test_java_micronaut_rest_jpa
 MAIN_CLASS := org.example.Application
 JAR = $(wildcard ./target/$(PROJECT_NAME)-*.jar)
 RUN_ARGS := -noverify -XX:TieredStopAtLevel=1 -Xnoagent -Djava.compiler=NONE
