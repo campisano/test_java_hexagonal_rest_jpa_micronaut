@@ -31,17 +31,9 @@ public class AddBookUseCase implements AddBookUseCasePort {
             throws IsbnAlreadyExistsException, BookInvalidException, AuthorInvalidException {
 
         Set<Author> authors = retrieveExistingAuthors(bookDto.getAuthors());
-        validateNewBook(bookDto);
-        Book book = BookDTOTranslator.fromDTO(bookDto, authors);
+        Book book = newBook(bookDto, authors);
 
         return booksRepository.create(BookDTOTranslator.toDTO(book));
-    }
-
-    private void validateNewBook(BookDTO bookDto) throws IsbnAlreadyExistsException {
-
-        if (booksRepository.findByIsbn(bookDto.getIsbn()).isPresent()) {
-            throw new IsbnAlreadyExistsException(bookDto.getIsbn());
-        }
     }
 
     private Set<Author> retrieveExistingAuthors(Set<String> authorNames) throws AuthorInvalidException {
@@ -57,5 +49,18 @@ public class AddBookUseCase implements AddBookUseCasePort {
         }
 
         return existingAuthors;
+    }
+
+    private Book newBook(BookDTO bookDto, Set<Author> authors) throws IsbnAlreadyExistsException, BookInvalidException {
+
+        if (booksRepository.findByIsbn(bookDto.getIsbn()).isPresent()) {
+            throw new IsbnAlreadyExistsException(bookDto.getIsbn());
+        }
+
+        try {
+            return BookDTOTranslator.fromDTO(bookDto, authors);
+        } catch (IllegalArgumentException exception) {
+            throw new BookInvalidException(exception.getMessage());
+        }
     }
 }

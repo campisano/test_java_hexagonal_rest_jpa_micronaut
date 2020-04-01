@@ -4,14 +4,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.example.application.dtos.BookDTO;
-import org.example.application.exceptions.AuthorInvalidException;
-import org.example.application.exceptions.BookInvalidException;
 import org.example.domain.Author;
 import org.example.domain.Book;
 
 public class BookDTOTranslator {
 
-    public static Book fromDTO(BookDTO dto, Set<Author> authors) throws BookInvalidException, AuthorInvalidException {
+    public static Book fromDTO(BookDTO dto, Set<Author> authors) {
         return new Book(dto.getIsbn(), dto.getTitle(), authors, dto.getDescription());
     }
 

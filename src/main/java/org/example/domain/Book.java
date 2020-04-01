@@ -3,16 +3,14 @@ package org.example.domain;
 import java.text.MessageFormat;
 import java.util.Set;
 
-import org.example.application.exceptions.BookInvalidException;
-
 public class Book {
     private String isbn;
     private String title;
     private Set<Author> authors;
     private String description;
 
-    public Book(String isbn, String title, Set<Author> authors, String description) throws BookInvalidException {
-        ensureCreable(isbn, title, authors, description);
+    public Book(String isbn, String title, Set<Author> authors, String description) {
+        ensureValidForCreation(isbn, title, authors, description);
         this.isbn = isbn;
         this.title = title;
         this.authors = authors;
@@ -35,18 +33,17 @@ public class Book {
         return description;
     }
 
-    private static void ensureCreable(String isbn, String title, Set<Author> authors, String description)
-            throws BookInvalidException {
+    private static void ensureValidForCreation(String isbn, String title, Set<Author> authors, String description) {
         if (isbn == null || isbn.length() == 0) {
-            throw new BookInvalidException(MessageFormat.format("Isbn {0} is invalid", isbn));
+            throw new IllegalArgumentException(MessageFormat.format("Isbn {0} is invalid", isbn));
         }
 
         if (title == null || title.length() == 0) {
-            throw new BookInvalidException(MessageFormat.format("Title {0} is invalid", title));
+            throw new IllegalArgumentException(MessageFormat.format("Title {0} is invalid", title));
         }
 
         if (authors == null || authors.size() == 0) {
-            throw new BookInvalidException(MessageFormat
+            throw new IllegalArgumentException(MessageFormat
                     .format("Book authors are invalid, expected 1 or more authors, requested {0}", authors));
         }
     }

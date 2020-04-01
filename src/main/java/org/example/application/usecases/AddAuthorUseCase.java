@@ -18,7 +18,13 @@ public class AddAuthorUseCase implements AddAuthorUseCasePort {
 
     @Override
     public AuthorDTO execute(AuthorDTO authorDto) throws AuthorInvalidException, AuthorAlreadyExistsException {
-        Author author = AuthorDTOTranslator.fromDTO(authorDto);
+        Author author;
+
+        try {
+            author = AuthorDTOTranslator.fromDTO(authorDto);
+        } catch (IllegalArgumentException exception) {
+            throw new AuthorInvalidException(exception.getMessage());
+        }
 
         if (authorsRepository.findByName(author.getName()).isPresent()) {
             throw new AuthorAlreadyExistsException(author.getName());

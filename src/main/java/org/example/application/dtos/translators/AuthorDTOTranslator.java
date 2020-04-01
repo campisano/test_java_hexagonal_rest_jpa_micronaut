@@ -4,16 +4,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.example.application.dtos.AuthorDTO;
-import org.example.application.exceptions.AuthorInvalidException;
 import org.example.domain.Author;
 
 public class AuthorDTOTranslator {
 
-    public static Author fromDTO(AuthorDTO dto) throws AuthorInvalidException {
+    public static Author fromDTO(AuthorDTO dto) {
         return new Author(dto.getName());
     }
 
-    public static Set<Author> fromDTO(Set<AuthorDTO> dtos) throws AuthorInvalidException {
+    public static Set<Author> fromDTO(Set<AuthorDTO> dtos) {
         Set<Author> authors = new HashSet<>();
         for (AuthorDTO dto : dtos) {
             authors.add(fromDTO(dto));

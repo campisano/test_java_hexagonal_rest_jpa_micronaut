@@ -2,12 +2,10 @@ package org.example.domain;
 
 import java.text.MessageFormat;
 
-import org.example.application.exceptions.AuthorInvalidException;
-
 public class Author {
     private String name;
 
-    public Author(String name) throws AuthorInvalidException {
+    public Author(String name) {
         ensureCreable(name);
         this.name = name;
     }
@@ -16,9 +14,9 @@ public class Author {
         return name;
     }
 
-    private static void ensureCreable(String name) throws AuthorInvalidException {
+    private static void ensureCreable(String name) {
         if (name == null || name.length() == 0) {
-            throw new AuthorInvalidException(MessageFormat.format("Name {0} is invalid", name));
+            throw new IllegalArgumentException(MessageFormat.format("Name {0} is invalid", name));
         }
     }
 }
