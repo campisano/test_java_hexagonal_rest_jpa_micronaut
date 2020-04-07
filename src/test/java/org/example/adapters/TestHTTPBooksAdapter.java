@@ -108,6 +108,7 @@ public class TestHTTPBooksAdapter {
 
     @Test
     public void postWhenAlreadyExist() {
+        postAuthors(Arrays.asList(new AuthorDTO("author1")));
         BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
         BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
         postBooks(Arrays.asList(b1, b2));

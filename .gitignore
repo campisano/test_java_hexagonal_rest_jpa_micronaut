@@ -3,6 +3,7 @@ Thumbs.db
 /.gradle
 /build/
 /target/
+/db/
 /out/
 /.idea
 /*.iml

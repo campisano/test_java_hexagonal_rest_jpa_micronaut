@@ -14,5 +14,9 @@
     </root>
 
     <logger name="org.hibernate" level="WARN" />
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE" />
+    <logger name="com.zaxxer.hikari" level="INFO" />
+    <logger name="io.netty" level="INFO" />
 
 </configuration>

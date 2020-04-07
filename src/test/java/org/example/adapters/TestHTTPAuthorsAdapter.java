@@ -52,7 +52,7 @@ public class TestHTTPAuthorsAdapter {
     public void postWhenAlreadyExist() {
         AuthorDTO a1 = new AuthorDTO("name1");
         AuthorDTO a2 = new AuthorDTO("name2");
-        postBooks(Arrays.asList(a1, a2));
+        postAuthors(Arrays.asList(a1, a2));
 
         AuthorDTO requestBody = new AuthorDTO("name1");
         HttpRequest<AuthorDTO> request = HttpRequest.POST("/v1/authors", requestBody);
@@ -63,7 +63,7 @@ public class TestHTTPAuthorsAdapter {
         Assertions.assertEquals(false, response.getBody().isPresent());
     }
 
-    private void postBooks(List<AuthorDTO> authors) {
+    private void postAuthors(List<AuthorDTO> authors) {
         authors.forEach(author -> {
             exchange(HttpRequest.POST("/v1/authors", author), Argument.of(DeserializableAuthorDTO.class));
         });
