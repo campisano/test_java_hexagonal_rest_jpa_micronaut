@@ -8,7 +8,7 @@ URL="https://archive.apache.org/dist/maven/maven-3/${MVN_VER}/binaries/apache-ma
 cd /srv/cache
 curl -s -C - -kLO "${URL}"
 tar -C /usr/local -xzf "apache-maven-${MVN_VER}-bin.tar.gz"
-rm -f "apache-maven-${MVN_VER}-bin.tar.gz"
+
 ln -s "/usr/local/apache-maven-${MVN_VER}/bin/mvn" /usr/local/bin
 mkdir -p /srv/cache/.m2
 ln -s -f -T /srv/cache/.m2 ${HOME}/.m2
