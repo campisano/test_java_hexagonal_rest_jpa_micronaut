@@ -2,6 +2,13 @@ dist: xenial
 language: shell
 os: linux
 services: docker
+
+cache:
+  directories:
+  - ${HOME}/.custom_cache
+before_cache:
+  - sudo chown -R ${USER} ${HOME}/.custom_cache
+
 if: tag IS blank
 
 jobs:
