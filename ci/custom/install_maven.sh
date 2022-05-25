@@ -3,12 +3,11 @@
 set -x -o errexit -o nounset -o pipefail
 
 MVN_VER="3.6.2"
-URL="https://archive.apache.org/dist/maven/maven-3/${MVN_VER}/binaries/apache-maven-${MVN_VER}-bin.tar.gz"
+MVN_FILE="apache-maven-${MVN_VER}-bin.tar.gz"
+URL="https://archive.apache.org/dist/maven/maven-3/${MVN_VER}/binaries/${MVN_FILE}"
 
-cd /srv/cache
-curl -s -C - -kLO "${URL}"
-tar -C /usr/local -xzf "apache-maven-${MVN_VER}-bin.tar.gz"
+mkdir -p .custom_cache/maven
+wget -P .custom_cache/maven -c -nv --no-check-certificate "${URL}"
+tar -C /usr/local -xzf ".custom_cache/maven/${MVN_FILE}"
 
 ln -s "/usr/local/apache-maven-${MVN_VER}/bin/mvn" /usr/local/bin
-mkdir -p /srv/cache/.m2
-ln -s -f -T /srv/cache/.m2 ${HOME}/.m2

@@ -2,11 +2,8 @@
 
 set -x -o errexit -o nounset -o pipefail
 
-# requisites
-./ci/install_ci_requisites.sh
-
 # vars
-export DOCKER_IMAGE=$(./ci/custom/get_docker_image_run.sh)
+export DOCKER_IMAGE_FROM=$(./ci/custom/get_docker_image_run.sh)
 export PROJECT_NAME=$(./ci/custom/get_project_name.sh)
 export PROJECT_VERSION=$(./ci/custom/get_project_version.sh)
 export RELEASE_TAG="${PROJECT_NAME}-${PROJECT_VERSION}"
@@ -21,14 +18,12 @@ git remote set-url origin "https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPOSIT
 git tag ${RELEASE_TAG}
 git push origin tag ${RELEASE_TAG}
 
-# build docker image
-docker build \
-       --build-arg "FROM_IMAGE=${DOCKER_IMAGE=}" \
-       --tag "${DOCKER_REPOSITORY}:${RELEASE_TAG}" \
-       --file ci/custom/Dockerfile .
-
-# push image tags
 docker pull "${DOCKER_REPOSITORY}:${RELEASE_TAG}" &> /dev/null && echo "ERROR: docker image \"${DOCKER_REPOSITORY}:${RELEASE_TAG}\" already exists" && exit 1
-docker push "${DOCKER_REPOSITORY}:${RELEASE_TAG}"
-docker tag "${DOCKER_REPOSITORY}:${RELEASE_TAG}" "${DOCKER_REPOSITORY}:${PROJECT_NAME}-latest"
-docker push "${DOCKER_REPOSITORY}:${PROJECT_NAME}-latest"
+
+# build docker image
+docker buildx create --use
+docker buildx build --push --platform=linux/amd64,linux/arm64/v8  \
+       --build-arg "FROM_IMAGE=${DOCKER_IMAGE_FROM=}" \
+       --tag "${DOCKER_REPOSITORY}:${RELEASE_TAG}" \
+       --tag "${DOCKER_REPOSITORY}:${PROJECT_NAME}-latest" \
+       --file ci/custom/Dockerfile .

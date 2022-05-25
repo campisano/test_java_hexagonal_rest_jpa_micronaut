@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/campisano/test_java_micronaut_rest_jpa.svg?branch=master "Build Status")](https://travis-ci.org/campisano/test_java_micronaut_rest_jpa)
-[![Test Coverage](https://codecov.io/gh/campisano/test_java_micronaut_rest_jpa/branch/master/graph/badge.svg "Test Coverage")](https://codecov.io/gh/campisano/test_java_micronaut_rest_jpa)
-[![Code Quality](https://img.shields.io/lgtm/grade/java/g/campisano/test_java_micronaut_rest_jpa.svg "Code Quality")](https://lgtm.com/projects/g/campisano/test_java_micronaut_rest_jpa/context:java)
-[![Docker Hub](https://img.shields.io/docker/image-size/riccardocampisano/public/test_java_micronaut_rest_jpa-latest?label=test_java_micronaut_rest_jpa-latest&logo=docker)](https://hub.docker.com/r/riccardocampisano/public/tags?name=test_java_micronaut_rest_jpa)
+[![Build Status](https://gitlab.com/campisano/test_java_micronaut_rest_jpa/badges/master/pipeline.svg "Build Status")](https://gitlab.com/campisano/test_java_micronaut_rest_jpa/-/pipelines)
+[![Sonar Coverage](https://sonarcloud.io/api/project_badges/measure?project=test_java_micronaut_rest_jpa&metric=coverage "Sonar Coverage")](https://sonarcloud.io/dashboard?id=test_java_micronaut_rest_jpa)
+[![Sonar Maintainability](https://sonarcloud.io/api/project_badges/measure?project=test_java_micronaut_rest_jpa&metric=sqale_rating "Sonar Maintainability")](https://sonarcloud.io/dashboard?id=test_java_micronaut_rest_jpa)
+[![Docker Image](https://img.shields.io/docker/image-size/riccardocampisano/public/test_java_micronaut_rest_jpa-latest?label=test_java_micronaut_rest_jpa-latest&logo=docker "Docker Image")](https://hub.docker.com/r/riccardocampisano/public/tags?name=test_java_micronaut_rest_jpa)
 
 # Test Java Micronaut Rest JPA with CI and Coverage
 

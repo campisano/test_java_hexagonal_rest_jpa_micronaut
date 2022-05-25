@@ -5,9 +5,9 @@ services: docker
 
 cache:
   directories:
-  - ${HOME}/.custom_cache
+  - .custom_cache
 before_cache:
-  - sudo chown -R ${USER} ${HOME}/.custom_cache
+  - sudo chown -R ${USER} .custom_cache
 
 if: tag IS blank
 
