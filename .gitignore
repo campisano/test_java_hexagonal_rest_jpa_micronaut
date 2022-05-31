@@ -1,15 +1,10 @@
-Thumbs.db
-.DS_Store
-/.gradle
-/build/
 /target/
 /db/
-/out/
-/.idea
-/*.iml
-/*.ipr
-/*.iws
-/.project
-/.settings
-/.classpath
+
+# micronaut stuffs
 /dependency-reduced-pom.xml
+
+# eclipse stuffs
+/.classpath
+/.project
+/.settings/

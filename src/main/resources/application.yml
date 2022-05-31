@@ -1,5 +1,5 @@
 project:
-  name: test-java-micronaut-rest-jpa
+  name: test_java_hexagonal_rest_jpa_micronaut
 
 micronaut:
   server:
