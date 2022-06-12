@@ -1,11 +1,10 @@
 package org.example.adapters;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
+import org.example.TestUtils;
 import org.example.application.dtos.AuthorDTO;
 import org.example.application.dtos.BookDTO;
 import org.junit.jupiter.api.AfterEach;
@@ -14,10 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.core.type.Argument;
-import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.DefaultHttpClient;
 import io.micronaut.runtime.server.EmbeddedServer;
 
@@ -42,105 +37,105 @@ public class TestHTTPBooksAdapter {
 
     @Test
     public void listAllWhenEmpty() {
-        HttpRequest<?> request = HttpRequest.GET("/v1/books");
+        // Act
+        var response = TestUtils.JsonRequest().get("/v1/books");
 
-        HttpResponse<?> response = exchange(request, Argument.listOf(DeserializableBookDTO.class));
-
-        Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-        Assertions.assertEquals(new ArrayList<BookDTO>(), response.body());
+        // Assert
+        Assertions.assertEquals(200, response.getStatusCode());
+        Assertions.assertEquals("[]", response.getBody().asString());
     }
 
     @Test
-    public void listAllWhenExists() {
-        postAuthors(Arrays.asList(new AuthorDTO("author1")));
-        postAuthors(Arrays.asList(new AuthorDTO("author2")));
-        BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
-        BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
-        postBooks(Arrays.asList(b1, b2));
-        HttpRequest<?> request = HttpRequest.GET("/v1/books");
+    public void listAllWhenExists2() throws Exception {
+        // Arrange
+        var a1 = new AuthorDTO("author1");
+        var a2 = new AuthorDTO("author2");
+        Arrays.asList(a1, a2).forEach(a -> {
+            TestUtils.JsonRequest().body(a).post("/v1/authors");
+        });
+        var b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList(a1.getName())), "description1");
+        var b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList(a2.getName())), "description2");
+        Arrays.asList(b1, b2).forEach(b -> {
+            TestUtils.JsonRequest().body(b).post("/v1/books");
+        });
 
-        HttpResponse<List<DeserializableBookDTO>> response = exchange(request,
-                Argument.listOf(DeserializableBookDTO.class));
+        // Act
+        var response = TestUtils.JsonRequest().get("/v1/books");
 
-        Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-        Assertions.assertNotNull(response.body());
-        Assertions.assertEquals(2, response.body().size());
-        Assertions.assertEquals(response.body().get(0).toString(), b1.toString());
-        Assertions.assertEquals(response.body().get(1).toString(), b2.toString());
+        // Assert
+        Assertions.assertEquals(200, response.getStatusCode());
+        Assertions.assertNotNull(response.jsonPath().getString(""));
+        Assertions.assertEquals(TestUtils.toJson(Arrays.asList(b1, b2)),
+                TestUtils.toJson(response.jsonPath().prettify()));
     }
 
     @Test
     public void getOneWhenEmpty() {
-        HttpRequest<?> request = HttpRequest.GET("/v1/books/unexistent_isbn");
+        // Act
+        var response = TestUtils.JsonRequest().get("/v1/books/unexistent_isbn");
 
-        HttpResponse<?> response = exchange(request, Argument.of(DeserializableBookDTO.class));
-
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
-        Assertions.assertEquals(false, response.getBody().isPresent());
+        // Assert
+        Assertions.assertEquals(404, response.getStatusCode());
+        Assertions.assertEquals("", response.getBody().asString());
     }
 
     @Test
-    public void getOneWhenExist() {
-        postAuthors(Arrays.asList(new AuthorDTO("author1")));
-        postAuthors(Arrays.asList(new AuthorDTO("author2")));
-        BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
-        BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
-        postBooks(Arrays.asList(b1, b2));
-        HttpRequest<?> request = HttpRequest.GET("/v1/books/isbn1");
+    public void getOneWhenExist() throws Exception {
+        // Arrange
+        var a1 = new AuthorDTO("author1");
+        var a2 = new AuthorDTO("author2");
+        Arrays.asList(a1, a2).forEach(a -> {
+            TestUtils.JsonRequest().body(a).post("/v1/authors");
+        });
+        var b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList(a1.getName())), "description1");
+        var b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList(a2.getName())), "description2");
+        Arrays.asList(b1, b2).forEach(b -> {
+            TestUtils.JsonRequest().body(b).post("/v1/books");
+        });
 
-        HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
+        // Act
+        var response = TestUtils.JsonRequest().get("/v1/books/isbn1");
 
-        Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-        Assertions.assertEquals(b1.toString(), response.body().toString());
+        // Assert
+        Assertions.assertEquals(200, response.getStatusCode());
+        Assertions.assertEquals(TestUtils.toJson(b1), TestUtils.toJson(response.jsonPath().prettify()));
     }
 
     @Test
-    public void post() {
-        postAuthors(Arrays.asList(new AuthorDTO("author1")));
-        BookDTO requestBody = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
-        HttpRequest<BookDTO> request = HttpRequest.POST("/v1/books", requestBody);
+    public void post() throws Exception {
+        // Arrange
+        var author = new AuthorDTO("author1");
+        TestUtils.JsonRequest().body(author).post("/v1/authors");
 
-        HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
+        // Act
+        var book = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList(author.getName())), "description1");
+        var response = TestUtils.JsonRequest().body(book).post("/v1/books");
 
-        Assertions.assertEquals(HttpStatus.CREATED, response.getStatus());
-        Assertions.assertEquals(requestBody.toString(), response.body().toString());
+        // Assert
+        Assertions.assertEquals(201, response.getStatusCode());
+        Assertions.assertEquals(TestUtils.toJson(book), TestUtils.toJson(response.jsonPath().prettify()));
     }
 
     @Test
     public void postWhenAlreadyExist() {
-        postAuthors(Arrays.asList(new AuthorDTO("author1")));
-        BookDTO b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
-        BookDTO b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList("author2")), "description2");
-        postBooks(Arrays.asList(b1, b2));
-
-        BookDTO requestBody = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList("author1")), "description1");
-        HttpRequest<BookDTO> request = HttpRequest.POST("/v1/books", requestBody);
-
-        HttpResponse<DeserializableBookDTO> response = exchange(request, Argument.of(DeserializableBookDTO.class));
-
-        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatus());
-        Assertions.assertEquals(false, response.getBody().isPresent());
-    }
-
-    private void postAuthors(List<AuthorDTO> authors) {
-        authors.forEach(author -> {
-            exchange(HttpRequest.POST("/v1/authors", author), Argument.of(Object.class));
+        // Arrange
+        var a1 = new AuthorDTO("author1");
+        var a2 = new AuthorDTO("author2");
+        Arrays.asList(a1, a2).forEach(a -> {
+            TestUtils.JsonRequest().body(a).post("/v1/authors");
         });
-    }
-
-    private void postBooks(List<BookDTO> books) {
-        books.forEach(book -> {
-            exchange(HttpRequest.POST("/v1/books", book), Argument.of(DeserializableBookDTO.class));
+        var b1 = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList(a1.getName())), "description1");
+        var b2 = new BookDTO("isbn2", "title2", new HashSet<>(Arrays.asList(a2.getName())), "description2");
+        Arrays.asList(b1, b2).forEach(b -> {
+            TestUtils.JsonRequest().body(b).post("/v1/books");
         });
-    }
 
-    private <I, O> HttpResponse<O> exchange(HttpRequest<I> request, Argument<O> bodyType) {
-        return client.toBlocking().exchange(request, bodyType, bodyType);
-    }
-}
+        // Act
+        var book = new BookDTO("isbn1", "title1", new HashSet<>(Arrays.asList(a1.getName())), "description1");
+        var response = TestUtils.JsonRequest().body(book).post("/v1/books");
 
-class DeserializableBookDTO extends BookDTO {
-    public DeserializableBookDTO() {
-        super(null, null, null, null);
+        // Assert
+        Assertions.assertEquals(422, response.getStatusCode());
+        Assertions.assertEquals("", response.getBody().asString());
     }
 }

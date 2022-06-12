@@ -15,6 +15,7 @@
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
     <micronaut.version>1.3.2</micronaut.version>
+    <rest-assured.version>5.1.1</rest-assured.version>
     <exec.mainClass>org.example.Application</exec.mainClass>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
@@ -112,6 +113,13 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${rest-assured.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -164,7 +172,7 @@
           <execution>
             <id>jacoco-initialize</id>
             <goals>
-                <goal>prepare-agent</goal>
+              <goal>prepare-agent</goal>
             </goals>
           </execution>
           <execution>
@@ -219,21 +227,21 @@
               <arg>-parameters</arg>
             </compilerArgs>
             <annotationProcessorPaths>
-                  <path>
-                    <groupId>io.micronaut</groupId>
-                    <artifactId>micronaut-inject-java</artifactId>
-                    <version>${micronaut.version}</version>
-                  </path>
-                  <path>
-                    <groupId>io.micronaut</groupId>
-                    <artifactId>micronaut-validation</artifactId>
-                    <version>${micronaut.version}</version>
-                  </path>
-                  <path>
-                    <groupId>io.micronaut.data</groupId>
-                    <artifactId>micronaut-data-processor</artifactId>
-                    <version>1.0.0</version>
-                  </path>
+              <path>
+                <groupId>io.micronaut</groupId>
+                <artifactId>micronaut-inject-java</artifactId>
+                <version>${micronaut.version}</version>
+              </path>
+              <path>
+                <groupId>io.micronaut</groupId>
+                <artifactId>micronaut-validation</artifactId>
+                <version>${micronaut.version}</version>
+              </path>
+              <path>
+                <groupId>io.micronaut.data</groupId>
+                <artifactId>micronaut-data-processor</artifactId>
+                <version>1.0.0</version>
+              </path>
             </annotationProcessorPaths>
           </configuration>
           <executions>

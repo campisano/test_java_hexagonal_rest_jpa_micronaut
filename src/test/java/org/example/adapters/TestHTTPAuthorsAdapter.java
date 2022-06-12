@@ -2,8 +2,8 @@ package org.example.adapters;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.List;
 
+import org.example.TestUtils;
 import org.example.application.dtos.AuthorDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -11,10 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.core.type.Argument;
-import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.DefaultHttpClient;
 import io.micronaut.runtime.server.EmbeddedServer;
 
@@ -38,44 +34,31 @@ public class TestHTTPAuthorsAdapter {
     }
 
     @Test
-    public void post() {
-        AuthorDTO requestBody = new AuthorDTO("name1");
-        HttpRequest<AuthorDTO> request = HttpRequest.POST("/v1/authors", requestBody);
+    public void post() throws Exception {
+        // Act
+        var author = new AuthorDTO("author1");
+        var response = TestUtils.JsonRequest().body(author).post("/v1/authors");
 
-        HttpResponse<DeserializableAuthorDTO> response = exchange(request, Argument.of(DeserializableAuthorDTO.class));
-
-        Assertions.assertEquals(HttpStatus.CREATED, response.getStatus());
-        Assertions.assertEquals(requestBody.toString(), response.body().toString());
+        // Assert
+        Assertions.assertEquals(201, response.getStatusCode());
+        Assertions.assertEquals(TestUtils.toJson(author), TestUtils.toJson(response.jsonPath().prettify()));
     }
 
     @Test
-    public void postWhenAlreadyExist() {
-        AuthorDTO a1 = new AuthorDTO("name1");
-        AuthorDTO a2 = new AuthorDTO("name2");
-        postAuthors(Arrays.asList(a1, a2));
-
-        AuthorDTO requestBody = new AuthorDTO("name1");
-        HttpRequest<AuthorDTO> request = HttpRequest.POST("/v1/authors", requestBody);
-
-        HttpResponse<DeserializableAuthorDTO> response = exchange(request, Argument.of(DeserializableAuthorDTO.class));
-
-        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatus());
-        Assertions.assertEquals(false, response.getBody().isPresent());
-    }
-
-    private void postAuthors(List<AuthorDTO> authors) {
-        authors.forEach(author -> {
-            exchange(HttpRequest.POST("/v1/authors", author), Argument.of(DeserializableAuthorDTO.class));
+    public void postAlreadyExistent() {
+        // Arrange
+        var a1 = new AuthorDTO("author1");
+        var a2 = new AuthorDTO("author2");
+        Arrays.asList(a1, a2).forEach(a -> {
+            TestUtils.JsonRequest().body(a).post("/v1/authors");
         });
-    }
 
-    private <I, O> HttpResponse<O> exchange(HttpRequest<I> request, Argument<O> bodyType) {
-        return client.toBlocking().exchange(request, bodyType, bodyType);
-    }
-}
+        // Act
+        var author = new AuthorDTO("author1");
+        var response = TestUtils.JsonRequest().body(author).post("/v1/authors");
 
-class DeserializableAuthorDTO extends AuthorDTO {
-    public DeserializableAuthorDTO() {
-        super(null);
+        // Assert
+        Assertions.assertEquals(422, response.getStatusCode());
+        Assertions.assertEquals("", response.getBody().asString());
     }
 }
