@@ -2,6 +2,6 @@
 
 set -o errexit -o nounset -o pipefail
 
-IMAGE="openjdk:8-jre-slim-bullseye"
+IMAGE="openjdk:11-jre-slim-bullseye"
 
 echo "${IMAGE}"

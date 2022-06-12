@@ -14,7 +14,7 @@ apt-get -qq -y install wget tar gzip > /dev/null
 mv -n /var/cache/apt/* .custom_cache/var/cache/apt/
 
 ./ci/custom/install_maven.sh
-mvn -Dmaven.repo.local=.custom_cache/maven/.m2/repository -B -ntp clean test package
+mvn -Dmaven.repo.local=.custom_cache/maven/.m2/repository -B -ntp -Dmaven.test.skip=true clean package
 
 PACKAGE="$(mvn -Dmaven.repo.local=.custom_cache/maven/.m2/repository -B -q help:evaluate -Dexpression=project.build.finalName -DforceStdout).jar"
-cp -a "target/${PACKAGE}" target/app.jar
+cp -a "target/${PACKAGE}" app.jar
