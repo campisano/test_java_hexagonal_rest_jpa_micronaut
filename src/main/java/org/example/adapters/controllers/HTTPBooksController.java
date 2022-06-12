@@ -26,11 +26,11 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 
 @Controller("/v1/books")
-@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class HTTPBooksController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(HTTPBooksController.class);
+
     private AddBookUseCasePort addBookUseCase;
     private GetBookUseCasePort getBookUseCase;
     private ListAllBooksUseCasePort listAllBooksUseCase;
@@ -48,21 +48,25 @@ public class HTTPBooksController {
 
         if (!request.getBody().isPresent()) {
             LOGGER.error("request without body");
+
             return HttpResponse.status(HttpStatus.BAD_REQUEST);
         }
 
-        AddBookRequest body = request.getBody().get();
+        var body = request.getBody().get();
 
         try {
-            BookDTO book = addBookUseCase
+            var book = addBookUseCase
                     .execute(new BookDTO(body.getIsbn(), body.getTitle(), body.getAuthors(), body.getDescription()));
             LOGGER.info("created, book={}", book);
+
             return HttpResponse.created(book);
         } catch (IsbnAlreadyExistsException | AuthorInvalidException | BookInvalidException exception) {
             LOGGER.error("exception, message={}", exception.getMessage());
+
             return HttpResponse.status(HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception exception) {
             LOGGER.error("exception, message={}", exception.toString());
+
             return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -72,14 +76,17 @@ public class HTTPBooksController {
         LOGGER.info("{}, isbn={}", request.toString(), isbn);
 
         try {
-            BookDTO book = getBookUseCase.execute(isbn);
+            var book = getBookUseCase.execute(isbn);
             LOGGER.info("ok, isbn={}", isbn);
+
             return HttpResponse.ok(book);
         } catch (IsbnNotExistsException exception) {
             LOGGER.error("exception, message={}", exception.getMessage());
+
             return HttpResponse.status(HttpStatus.NOT_FOUND);
         } catch (Exception exception) {
             LOGGER.error("exception, message={}", exception.toString());
+
             return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -89,11 +96,13 @@ public class HTTPBooksController {
         LOGGER.info("{}", request.toString());
 
         try {
-            List<BookDTO> books = listAllBooksUseCase.execute();
+            var books = listAllBooksUseCase.execute();
             LOGGER.info("ok");
+
             return HttpResponse.ok(books);
         } catch (Exception exception) {
             LOGGER.error("exception, message={}", exception.toString());
+
             return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -18,11 +18,11 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 
 @Controller("/v1/authors")
-@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class HTTPAuthorsController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(HTTPAuthorsController.class);
+
     private AddAuthorUseCasePort addAuthorUseCase;
 
     public HTTPAuthorsController(AddAuthorUseCasePort addAuthorUseCase) {
@@ -35,20 +35,25 @@ public class HTTPAuthorsController {
 
         if (!request.getBody().isPresent()) {
             LOGGER.error("request without body");
+
             return HttpResponse.status(HttpStatus.BAD_REQUEST);
         }
 
-        AddAuthorRequest body = request.getBody().get();
+        var body = request.getBody().get();
 
         try {
-            AuthorDTO author = addAuthorUseCase.execute(new AuthorDTO(body.getName()));
+            var author = addAuthorUseCase.execute(new AuthorDTO(body.getName()));
+
             LOGGER.info("created, author={}", author);
+
             return HttpResponse.created(author);
         } catch (AuthorInvalidException | AuthorAlreadyExistsException exception) {
             LOGGER.error("exception, message={}", exception.getMessage());
+
             return HttpResponse.status(HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception exception) {
             LOGGER.error("exception, message={}", exception.toString());
+
             return HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

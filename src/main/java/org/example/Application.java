@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.example.application.ports.out.AuthorsRepositoryPort;
@@ -9,6 +10,8 @@ import org.example.application.usecases.AddBookUseCase;
 import org.example.application.usecases.GetBookUseCase;
 import org.example.application.usecases.ListAllBooksUseCase;
 
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
 import io.micronaut.runtime.Micronaut;
 
 public class Application {
@@ -17,31 +20,43 @@ public class Application {
     }
 }
 
-@Singleton
-class SingletonAddBookUseCase extends AddBookUseCase {
-    public SingletonAddBookUseCase(BooksRepositoryPort booksRepository, AuthorsRepositoryPort authorsRepository) {
-        super(booksRepository, authorsRepository);
+@Factory
+class InjectionProvider {
+
+    private AddBookUseCase addBookUseCase;
+    private GetBookUseCase getBookUseCase;
+    private ListAllBooksUseCase listAllBooksUseCase;
+    private AddAuthorUseCase addAuthorUseCase;
+
+    @Inject
+    public InjectionProvider(AuthorsRepositoryPort authorsRepository, BooksRepositoryPort booksRepository) {
+        addBookUseCase = new AddBookUseCase(booksRepository, authorsRepository);
+        getBookUseCase = new GetBookUseCase(booksRepository);
+        listAllBooksUseCase = new ListAllBooksUseCase(booksRepository);
+        addAuthorUseCase = new AddAuthorUseCase(authorsRepository);
     }
 
-}
-
-@Singleton
-class SingletonGetBookUseCase extends GetBookUseCase {
-    public SingletonGetBookUseCase(BooksRepositoryPort booksRepository) {
-        super(booksRepository);
+    @Bean
+    @Singleton
+    public AddBookUseCase getAddBookUseCase() {
+        return addBookUseCase;
     }
-}
 
-@Singleton
-class SingletonListAllBooksUseCase extends ListAllBooksUseCase {
-    public SingletonListAllBooksUseCase(BooksRepositoryPort booksRepository) {
-        super(booksRepository);
+    @Bean
+    @Singleton
+    public GetBookUseCase getGetBookUseCase() {
+        return getBookUseCase;
     }
-}
 
-@Singleton
-class SingletonAddAuthorUseCase extends AddAuthorUseCase {
-    public SingletonAddAuthorUseCase(AuthorsRepositoryPort authorsRepository) {
-        super(authorsRepository);
+    @Bean
+    @Singleton
+    public ListAllBooksUseCase getListAllBooksUseCase() {
+        return listAllBooksUseCase;
+    }
+
+    @Bean
+    @Singleton
+    public AddAuthorUseCase getAddAuthorUseCase() {
+        return addAuthorUseCase;
     }
 }

@@ -2,12 +2,11 @@ package org.example.adapters.repositories;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
+import javax.transaction.Transactional;
 
-import org.example.adapters.repositories.models.AuthorModel;
 import org.example.adapters.repositories.models.BookModel;
 import org.example.adapters.repositories.models.translators.BookModelTranslator;
 import org.example.application.dtos.BookDTO;
@@ -27,10 +26,11 @@ public class JPABooksRepository implements BooksRepositoryPort {
         this.authorsRepository = authorsRepository;
     }
 
+    @Transactional
     @Override
     public BookDTO create(BookDTO dto) {
-        Set<AuthorModel> authors = authorsRepository.findByNameIn(dto.getAuthors());
-        BookModel model = BookModelTranslator.fromDTO(dto, authors);
+        var authors = authorsRepository.findByNameIn(dto.getAuthors());
+        var model = BookModelTranslator.fromDTO(dto, authors);
 
         model = booksRepository.save(model);
 
@@ -39,14 +39,13 @@ public class JPABooksRepository implements BooksRepositoryPort {
 
     @Override
     public List<BookDTO> findAll() {
-
         return booksRepository.findAll().stream().map(book -> BookModelTranslator.toDTO(book))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<BookDTO> findByIsbn(String isbn) {
-        Optional<BookModel> optModel = booksRepository.findByIsbn(isbn);
+        var optModel = booksRepository.findByIsbn(isbn);
 
         if (!optModel.isPresent()) {
             return Optional.<BookDTO>empty();

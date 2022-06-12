@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Singleton;
+import javax.transaction.Transactional;
 
 import org.example.adapters.repositories.models.AuthorModel;
 import org.example.adapters.repositories.models.translators.AuthorModelTranslator;
@@ -23,9 +24,10 @@ public class JPAAuthorsRepository implements AuthorsRepositoryPort {
         this.authorsRepository = authorsRepository;
     }
 
+    @Transactional
     @Override
     public AuthorDTO create(AuthorDTO dto) {
-        AuthorModel model = AuthorModelTranslator.fromDTO(dto);
+        var model = AuthorModelTranslator.fromDTO(dto);
 
         model = authorsRepository.save(model);
 
@@ -34,7 +36,7 @@ public class JPAAuthorsRepository implements AuthorsRepositoryPort {
 
     @Override
     public Optional<AuthorDTO> findByName(String name) {
-        Optional<AuthorModel> optModel = authorsRepository.findByName(name);
+        var optModel = authorsRepository.findByName(name);
 
         if (!optModel.isPresent()) {
             return Optional.<AuthorDTO>empty();
